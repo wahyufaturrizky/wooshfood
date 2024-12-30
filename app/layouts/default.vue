@@ -1,5 +1,5 @@
 <template>
-  <VApp>
+  <VApp :theme="'light'">
     <VMain>
       <slot />
     </VMain>
