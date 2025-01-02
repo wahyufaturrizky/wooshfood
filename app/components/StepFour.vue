@@ -1,4 +1,25 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const emit = defineEmits([
+  "update:cardtype",
+  "update:cardnumber",
+  "update:expdate",
+  "update:ccv",
+  "update:paymentmethod",
+]);
+
+const cardType = ref("");
+const cardNumber = ref("");
+const expDate = ref("");
+const ccv = ref("");
+const paymentMethod = ref("credit-card");
+
+const handlePayment = (val: string) => {
+  paymentMethod.value = val;
+  emit("update:paymentmethod", val);
+};
+
+const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
+</script>
 
 <template>
   <VRow>
@@ -49,33 +70,57 @@
         <p>Payment Method</p>
 
         <div class="grid grid-cols-3 gap-4 my-4">
-          <div class="flex items-center justify-center border border-[#ECEFF3] rounded-lg p-4">
-            <NuxtImg height="auto" width="50" src="/credit-card.png" alt="apple-pay" />
-          </div>
-          <div class="flex items-center justify-center border border-[#ECEFF3] rounded-lg p-4">
-            <NuxtImg height="auto" width="50" src="/paypal.png" alt="apple-pay" />
-          </div>
-          <div class="flex items-center justify-center border border-[#ECEFF3] rounded-lg p-4">
-            <NuxtImg height="auto" width="50" src="/apple-pay.png" alt="apple-pay" />
+          <div
+            v-for="(item, index) in listPayentMethod"
+            :key="index"
+            :class="[
+              item === paymentMethod ? 'border-[#80509C]' : 'border-[#ECEFF3]',
+              'flex items-center justify-center border-2 rounded-lg p-4',
+            ]"
+            @click="handlePayment(item)"
+          >
+            <NuxtImg height="auto" width="50" :src="`/${item}.png`" :alt="item" />
           </div>
         </div>
 
-        <p>Payment Method</p>
+        <p class="mb-4">Payment Method</p>
 
         <VSelect
+          v-model="cardType"
           variant="outlined"
           placeholder="Card Type"
           :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+          @update:model-value="emit('update:cardtype', $event)"
         />
 
-        <VTextField color="#80509C" placeholder="Card Number" variant="outlined" />
+        <VTextField
+          v-model="cardNumber"
+          color="#80509C"
+          placeholder="Card Number"
+          variant="outlined"
+          @update:model-value="emit('update:cardnumber', $event)"
+        />
 
         <VRow>
           <VCol cols="6">
-            <VTextField color="#80509C" type="number" placeholder="Exp Date" variant="outlined" />
+            <VTextField
+              v-model="expDate"
+              color="#80509C"
+              type="number"
+              placeholder="Exp Date"
+              variant="outlined"
+              @update:model-value="emit('update:expdate', $event)"
+            />
           </VCol>
           <VCol cols="6">
-            <VTextField color="#80509C" type="number" placeholder="CCV" variant="outlined" />
+            <VTextField
+              v-model="ccv"
+              color="#80509C"
+              type="number"
+              placeholder="CCV"
+              variant="outlined"
+              @update:model-value="emit('update:ccv', $event)"
+            />
           </VCol>
         </VRow>
 

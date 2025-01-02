@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const plan = ref(2);
 
-const emit = defineEmits(["next"]);
+const emit = defineEmits(["next", "update:plan"]);
 </script>
 
 <template>
@@ -13,7 +13,12 @@ const emit = defineEmits(["next"]);
     Our Services are what you want! Choose one of them
   </p>
 
-  <VRadioGroup v-model="plan" color="#80509C" inline>
+  <VRadioGroup
+    v-model="plan"
+    color="#80509C"
+    inline
+    @update:model-value="emit('update:plan', $event)"
+  >
     <template v-for="item in 3" :key="item">
       <div
         :class="[

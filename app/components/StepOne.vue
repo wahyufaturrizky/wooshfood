@@ -1,10 +1,17 @@
 <script setup lang="ts">
-const emit = defineEmits(["next"]);
+const regNumber = ref("");
+const emit = defineEmits(["next", "update:regnumber"]);
 </script>
 
 <template>
   <p class="text-black-500 text-lg mb-4">Registration Number</p>
-  <VTextField color="#80509C" placeholder="Enter your registration number" variant="outlined" />
+  <VTextField
+    v-model="regNumber"
+    color="#80509C"
+    placeholder="Enter your registration number"
+    variant="outlined"
+    @input="emit('update:regnumber', $event)"
+  />
 
-  <VBtn @click="emit('next')" color="#80509C" block> Next </VBtn>
+  <VBtn color="#80509C" block @click="emit('next')"> Next </VBtn>
 </template>

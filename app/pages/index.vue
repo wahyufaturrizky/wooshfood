@@ -1,12 +1,25 @@
 <script lang="ts" setup>
 const stepper = ref(1);
 
+const regNumber = ref("");
+const name = ref("");
+const email = ref("");
+const phone = ref("");
+const check = ref(false);
+const plan = ref(2);
+
+const cardType = ref("");
+const cardNumber = ref("");
+const expDate = ref("");
+const ccv = ref("");
+const paymentMethod = ref("credit-card");
+
 const stepperList = 4;
 </script>
 
 <template>
   <div class="bg-[#FBFBFC] h-dvh">
-    <Header />
+    <HeaderComp />
 
     <div class="mx-auto max-w-7xl py-11 sm:py-48 lg:py-56">
       <div class="text-center">
@@ -18,7 +31,7 @@ const stepperList = 4;
         </p>
       </div>
 
-      <VStepper class="mt-4" :flat="true" bg-color="transparent" alt-labels v-model="stepper">
+      <VStepper v-model="stepper" class="mt-4" :flat="true" bg-color="transparent" alt-labels>
         <template #default="{ next }">
           <VStepperHeader class="!shadow-none">
             <template v-for="n in stepperList" :key="`${n}-step`">
@@ -30,27 +43,41 @@ const stepperList = 4;
                 editable
               />
 
-              <div class="w-full border-dashed border" v-if="n !== stepperList" :key="n" />
+              <div v-if="n !== stepperList" :key="n" class="w-full border-dashed border" />
             </template>
           </VStepperHeader>
 
           <VStepperWindow>
             <VStepperWindowItem
-              class="p-4"
               v-for="n in stepperList"
               :key="`${n}-content`"
               :value="n"
+              class="p-4"
             >
               <div v-if="n === 1" class="mx-auto max-w-xl bg-white p-6 rounded-lg shadow-lg">
-                <StepOne @next="next" />
+                <StepOne @update:regnumber="regNumber = $event.target.value" @next="next" />
               </div>
 
               <div v-if="n === 2" class="mx-auto max-w-xl bg-white p-6 rounded-lg shadow-lg">
-                <StepTwo @next="next" />
+                <StepTwo
+                  @next="next"
+                  @update:name="name = $event.target.value"
+                  @update:email="email = $event.target.value"
+                  @update:phone="phone = $event.target.value"
+                  @update:check="check = $event.target.value"
+                />
               </div>
 
               <div v-if="n === 3" class="mx-auto max-w-4xl bg-white p-6 rounded-lg shadow-lg">
-                <StepThree @next="next" />
+                <StepThree
+                  @update:cardtype="cardType = $event"
+                  @update:cardnumber="cardNumber = $event"
+                  @update:expdate="expDate = $event"
+                  @update:ccv="ccv = $event"
+                  @update:paymentmethod="paymentMethod = $event"
+                  @update:plan="plan = $event"
+                  @next="next"
+                />
               </div>
 
               <div v-if="n === 4">
