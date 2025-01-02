@@ -6,16 +6,16 @@
       <VTable>
         <thead>
           <tr class="bg-purple-soft-woosh">
-            <th class="text-left rounded-tl-lg">Product</th>
-            <th class="text-left">Quantity</th>
-            <th class="text-left rounded-tr-lg">Price</th>
+            <th class="text-right rounded-tl-lg">Product</th>
+            <th class="text-right">Quantity</th>
+            <th class="text-right rounded-tr-lg">Price</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in 3" :key="item">
-            <td>{{ item }}</td>
-            <td>{{ item }}</td>
-            <td>{{ item }}</td>
+            <td class="text-right">{{ item }}</td>
+            <td class="text-right">{{ item }}</td>
+            <td class="text-right">{{ item }}</td>
           </tr>
         </tbody>
         <tfoot>
