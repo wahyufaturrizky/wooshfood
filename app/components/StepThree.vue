@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const plan = ref(2);
+
+const emit = defineEmits(["next"]);
 </script>
 
 <template>
@@ -40,5 +42,5 @@ const plan = ref(2);
     </template>
   </VRadioGroup>
 
-  <VBtn color="#80509C" block> Next </VBtn>
+  <VBtn @click="emit('next')" color="#80509C" block> Next </VBtn>
 </template>

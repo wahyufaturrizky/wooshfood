@@ -19,7 +19,7 @@ const stepperList = 4;
       </div>
 
       <VStepper class="mt-4" :flat="true" bg-color="transparent" alt-labels v-model="stepper">
-        <template #default="{}">
+        <template #default="{ next }">
           <VStepperHeader class="!shadow-none">
             <template v-for="n in stepperList" :key="`${n}-step`">
               <VStepperItem
@@ -42,15 +42,15 @@ const stepperList = 4;
               :value="n"
             >
               <div v-if="n === 1" class="mx-auto max-w-xl bg-white p-6 rounded-lg shadow-lg">
-                <StepOne />
+                <StepOne @next="next" />
               </div>
 
               <div v-if="n === 2" class="mx-auto max-w-xl bg-white p-6 rounded-lg shadow-lg">
-                <StepTwo />
+                <StepTwo @next="next" />
               </div>
 
               <div v-if="n === 3" class="mx-auto max-w-4xl bg-white p-6 rounded-lg shadow-lg">
-                <StepThree />
+                <StepThree @next="next" />
               </div>
 
               <div v-if="n === 4">
