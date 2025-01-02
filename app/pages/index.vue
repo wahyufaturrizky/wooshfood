@@ -15,6 +15,10 @@ const ccv = ref("");
 const paymentMethod = ref("credit-card");
 
 const stepperList = 4;
+
+const handleProceed = () => {
+  console.log("@handleProceed");
+};
 </script>
 
 <template>
@@ -69,19 +73,18 @@ const stepperList = 4;
               </div>
 
               <div v-if="n === 3" class="mx-auto max-w-4xl bg-white p-6 rounded-lg shadow-lg">
-                <StepThree
+                <StepThree @update:plan="plan = $event" @next="next" />
+              </div>
+
+              <div v-if="n === 4">
+                <StepFour
                   @update:cardtype="cardType = $event"
                   @update:cardnumber="cardNumber = $event"
                   @update:expdate="expDate = $event"
                   @update:ccv="ccv = $event"
                   @update:paymentmethod="paymentMethod = $event"
-                  @update:plan="plan = $event"
-                  @next="next"
+                  @proceed="handleProceed"
                 />
-              </div>
-
-              <div v-if="n === 4">
-                <StepFour />
               </div>
             </VStepperWindowItem>
           </VStepperWindow>

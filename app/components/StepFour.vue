@@ -5,9 +5,10 @@ const emit = defineEmits([
   "update:expdate",
   "update:ccv",
   "update:paymentmethod",
+  "proceed",
 ]);
 
-const cardType = ref("");
+const cardType = ref("Card Type");
 const cardNumber = ref("");
 const expDate = ref("");
 const ccv = ref("");
@@ -88,7 +89,6 @@ const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
         <VSelect
           v-model="cardType"
           variant="outlined"
-          placeholder="Card Type"
           :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
           @update:model-value="emit('update:cardtype', $event)"
         />
@@ -124,7 +124,7 @@ const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
           </VCol>
         </VRow>
 
-        <VBtn color="#80509C" block> Proceed </VBtn>
+        <VBtn @click="emit('proceed')" color="#80509C" block> Proceed </VBtn>
       </div>
     </VCol>
   </VRow>
