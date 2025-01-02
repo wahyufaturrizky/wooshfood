@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const stepper = ref(3);
+const stepper = ref(1);
 
 const stepperList = 4;
 </script>
