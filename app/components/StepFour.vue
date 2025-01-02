@@ -24,19 +24,21 @@
             <td class="text-right">$750.00</td>
           </tr>
           <tr>
-            <td colspan="2" class="text-right">Taxes</td>
-            <td class="text-right">$59.69</td>
+            <td colspan="2" class="text-right border-none">Taxes</td>
+            <td class="text-right border-none">$59.69</td>
           </tr>
           <tr>
-            <td colspan="2" class="text-right">Discount</td>
-            <td class="text-right">$0.00</td>
+            <td colspan="2" class="text-right border-none">Discount</td>
+            <td class="text-right border-none">$0.00</td>
           </tr>
           <tr>
             <td colspan="2" class="text-right font-bold">Total</td>
             <td class="text-right font-bold">$999.99</td>
           </tr>
           <tr>
-            <td colspan="3" class="text-right font-bold text-purple-woosh">I have a promo</td>
+            <td colspan="3" class="text-right font-bold text-purple-woosh border-none">
+              I have a promo
+            </td>
           </tr>
         </tfoot>
       </VTable>
