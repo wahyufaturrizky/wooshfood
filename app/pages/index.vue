@@ -7,6 +7,7 @@ const email = ref("");
 const phone = ref("");
 const check = ref(false);
 const plan = ref(2);
+const loyalPlan = ref();
 
 const cardType = ref("");
 const cardNumber = ref("");
@@ -73,7 +74,11 @@ const handleProceed = () => {
               </div>
 
               <div v-if="n === 3" class="mx-auto max-w-4xl bg-white p-6 rounded-lg shadow-lg">
-                <StepThree @update:plan="plan = $event" @next="next" />
+                <StepThree
+                  @update:loyalplan="loyalPlan = $event"
+                  @update:plan="plan = $event"
+                  @next="next"
+                />
               </div>
 
               <div v-if="n === 4">

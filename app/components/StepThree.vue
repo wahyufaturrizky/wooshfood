@@ -1,7 +1,25 @@
 <script setup lang="ts">
 const plan = ref(2);
+const loyalPlan = ref();
 
-const emit = defineEmits(["next", "update:plan"]);
+const emit = defineEmits(["next", "update:plan", "update:loyalplan"]);
+
+const isOpenDialog = ref(false);
+
+const listLoyal = [
+  {
+    title: "Chai Latte - Regular",
+    desc: "11 Points will be reduced from your account",
+  },
+  {
+    title: "Acai Smoothie",
+    desc: "3 Points will be reduced from your account",
+  },
+  {
+    title: "Wash products",
+    desc: "1 Points will be reduced from your account",
+  },
+];
 </script>
 
 <template>
@@ -47,5 +65,52 @@ const emit = defineEmits(["next", "update:plan"]);
     </template>
   </VRadioGroup>
 
-  <VBtn @click="emit('next')" color="#80509C" block> Next </VBtn>
+  <VBtn color="#80509C" block @click="emit('next')"> Next </VBtn>
+
+  <p
+    class="mt-4 underline text-pretty text-lg font-medium text-purple-woosh sm:text-base cursor-pointer text-center"
+    @click="isOpenDialog = true"
+  >
+    Redeem Royalty
+  </p>
+
+  <VDialog v-model="isOpenDialog" max-width="500">
+    <div class="bg-white rounded-lg shadow-lg">
+      <div class="py-4 px-6 flex items-center justify-between">
+        <p>Loyal Benefits</p>
+
+        <VIcon icon="mdi-close" @click="isOpenDialog = false" />
+      </div>
+
+      <div class="bg-[#FCF8FF] py-4 px-6 flex items-center">
+        <p class="font-medium">My Reward Points:</p>
+        <p class="text-purple-woosh font-bold ml-2">01234</p>
+      </div>
+
+      <div class="px-3 pt-4">
+        <VRadioGroup
+          v-model="loyalPlan"
+          color="#80509C"
+          @update:model-value="emit('update:loyalplan', $event)"
+        >
+          <VRadio v-for="(item, index) in listLoyal" :key="index" :value="item.title">
+            <template #label>
+              <div class="flex flex-col mt-6">
+                <p class="text-base font-semibold text-black-500">
+                  {{ item.title }}
+                </p>
+                <p class="text-base text-[#4A4C56] font-light">
+                  {{ item.desc }}
+                </p>
+              </div>
+            </template>
+          </VRadio>
+        </VRadioGroup>
+      </div>
+
+      <div class="py-4 px-6">
+        <VBtn color="#80509C" @click="isOpenDialog = false"> Redeem now </VBtn>
+      </div>
+    </div>
+  </VDialog>
 </template>
