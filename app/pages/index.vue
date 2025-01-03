@@ -73,7 +73,7 @@ const handleProceed = () => {
                 />
               </div>
 
-              <div v-if="n === 3" class="mx-auto max-w-4xl bg-white p-6 rounded-lg shadow-lg">
+              <div v-if="n === 3" class="mx-auto max-w-4xl p-6">
                 <StepThree
                   @update:loyalplan="loyalPlan = $event"
                   @update:plan="plan = $event"

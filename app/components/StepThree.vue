@@ -23,6 +23,13 @@ const listLoyal = [
 </script>
 
 <template>
+  <div
+    class="rounded-[32px] py-4 mb-4 px-6 flex items-center justify-center border border-[#DFE1E7] w-64 mx-auto"
+  >
+    <p class="font-medium">My Reward Points:</p>
+    <p class="text-purple-woosh font-bold ml-2">01234</p>
+  </div>
+
   <p class="text-2xl text-center">
     Have a <span><b>NEW</b></span> car!
   </p>
