@@ -24,23 +24,25 @@ const handleProceed = async () => {
   try {
     loading.value = true;
 
-    const res = await $fetch("/api/submit", {
+    const res: ResSalesOrder = await $fetch("/api/submit", {
       method: "POST",
       body: {
         params: {
           customer: {
-            name: "Vino ganteng",
-            email: "hajiyanto@woosh.com",
-            phone: "94586969676",
-            registration_number: "REG-126",
+            name: name.value,
+            email: email.value,
+            phone: phone.value,
+            registration_number: regNumber.value,
           },
-          date_order: "2025-01-10 13:34:22",
+          date_order: formatDate(new Date()),
           order_line: [],
         },
       },
     });
 
     if (res?.status === "success") {
+      loading.value = false;
+    } else {
       loading.value = false;
     }
   } catch (error) {

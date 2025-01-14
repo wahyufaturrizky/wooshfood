@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     },
     body: body,
   }).catch((err) => {
-    return err;
+    return err.data;
   });
 
   return res;
