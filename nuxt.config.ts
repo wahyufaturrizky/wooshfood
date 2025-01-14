@@ -17,6 +17,10 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
+  runtimeConfig: {
+    coreBaseUrl: process.env.NUXT_CORE_BASE_URL,
+  },
+
   ssr: true,
 
   // when enabling ssr option you need to disable inlineStyles and maybe devLogs

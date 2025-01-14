@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { ResSalesOrder } from "~/interface/common.interface";
+
 const stepper = ref(1);
 
 const regNumber = ref("");
@@ -6,6 +8,7 @@ const name = ref("");
 const email = ref("");
 const phone = ref("");
 const check = ref(false);
+const loading = ref(false);
 const plan = ref(2);
 const loyalPlan = ref();
 
@@ -17,8 +20,32 @@ const paymentMethod = ref("credit-card");
 
 const stepperList = 4;
 
-const handleProceed = () => {
-  console.log("@handleProceed");
+const handleProceed = async () => {
+  try {
+    loading.value = true;
+
+    const res = await $fetch("/api/submit", {
+      method: "POST",
+      body: {
+        params: {
+          customer: {
+            name: "Vino ganteng",
+            email: "hajiyanto@woosh.com",
+            phone: "94586969676",
+            registration_number: "REG-126",
+          },
+          date_order: "2025-01-10 13:34:22",
+          order_line: [],
+        },
+      },
+    });
+
+    if (res?.status === "success") {
+      loading.value = false;
+    }
+  } catch (error) {
+    loading.value = false;
+  }
 };
 </script>
 
@@ -83,6 +110,7 @@ const handleProceed = () => {
 
               <div v-if="n === 4">
                 <StepFour
+                  :loading="loading"
                   @update:cardtype="cardType = $event"
                   @update:cardnumber="cardNumber = $event"
                   @update:expdate="expDate = $event"

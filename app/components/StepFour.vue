@@ -1,4 +1,10 @@
 <script setup lang="ts">
+defineProps({
+  loading: {
+    type: Boolean,
+  },
+});
+
 const emit = defineEmits([
   "update:cardtype",
   "update:cardnumber",
@@ -124,7 +130,7 @@ const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
           </VCol>
         </VRow>
 
-        <VBtn @click="emit('proceed')" color="#80509C" block> Proceed </VBtn>
+        <VBtn :loading="loading" color="#80509C" block @click="emit('proceed')"> Proceed </VBtn>
       </div>
     </VCol>
   </VRow>
