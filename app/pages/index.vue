@@ -66,7 +66,7 @@ const handleProceed = async () => {
 </script>
 
 <template>
-  <div class="bg-[#FBFBFC] h-dvh">
+  <div class="bg-[#FBFBFC]">
     <HeaderComp />
 
     <div class="mx-auto max-w-7xl py-11 sm:py-48 lg:py-56">

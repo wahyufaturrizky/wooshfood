@@ -14,6 +14,8 @@ const emit = defineEmits([
   "proceed",
 ]);
 
+const { mdAndDown } = useDisplay();
+
 const cardType = ref("Card Type");
 const cardNumber = ref("");
 const expDate = ref("");
@@ -30,7 +32,7 @@ const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
 
 <template>
   <VRow>
-    <VCol cols="6">
+    <VCol :cols="mdAndDown ? '12' : '6'">
       <VTable>
         <thead>
           <tr class="bg-purple-soft-woosh">
@@ -72,7 +74,7 @@ const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
       </VTable>
     </VCol>
 
-    <VCol cols="6">
+    <VCol :cols="mdAndDown ? '12' : '6'">
       <div class="border border-[#ECEFF3] p-6 rounded-lg">
         <p>Payment Method</p>
 

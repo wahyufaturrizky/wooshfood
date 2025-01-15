@@ -4,6 +4,8 @@ const loyalPlan = ref();
 
 const emit = defineEmits(["next", "update:plan", "update:loyalplan"]);
 
+const { mdAndUp } = useDisplay();
+
 const isOpenDialog = ref(false);
 
 const listLoyal = [
@@ -41,14 +43,14 @@ const listLoyal = [
   <VRadioGroup
     v-model="plan"
     color="#80509C"
-    inline
+    :inline="mdAndUp"
     @update:model-value="emit('update:plan', $event)"
   >
     <template v-for="item in 3" :key="item">
       <div
         :class="[
           item === plan ? 'border-[#80509C]' : 'border-black-400',
-          'rounded-lg p-6 mx-auto border-2',
+          'rounded-lg p-6 mx-auto border-2 md:mb-4 lg:mb-0',
         ]"
       >
         <VRadio :value="item">
