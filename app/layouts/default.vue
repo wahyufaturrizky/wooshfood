@@ -1,6 +1,14 @@
+<script setup lang="ts">
+const { isSnackbarVisible, snackColor, snackMessage } = useSnackbar();
+</script>
+
 <template>
   <VApp :theme="'light'">
     <VMain>
+      <VSnackbar v-model="isSnackbarVisible" location="top" :color="snackColor" :timeout="5000">
+        <VIcon color="white" icon="mdi-alert" /> {{ snackMessage }}
+      </VSnackbar>
+
       <slot />
     </VMain>
   </VApp>

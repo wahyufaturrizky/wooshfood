@@ -20,6 +20,14 @@ const paymentMethod = ref("credit-card");
 
 const stepperList = 4;
 
+const resetForm = () => {
+  regNumber.value = "";
+  name.value = "";
+  email.value = "";
+  phone.value = "";
+  check.value = false;
+};
+
 const handleProceed = async () => {
   try {
     loading.value = true;
@@ -41,11 +49,17 @@ const handleProceed = async () => {
     });
 
     if (res?.status === "success") {
+      const { msg } = res || {};
+      useSnackbar().sendSnackbar(msg, "success");
+      resetForm();
       loading.value = false;
     } else {
+      useSnackbar().sendSnackbar(res.msg, "error");
       loading.value = false;
     }
   } catch (error) {
+    console.log("handleProceed", error);
+
     loading.value = false;
   }
 };

@@ -19,6 +19,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     coreBaseUrl: process.env.NUXT_CORE_BASE_URL,
+    xOdooApiKey: process.env.NUXT_X_ODOO_API_KEY,
   },
 
   ssr: true,
