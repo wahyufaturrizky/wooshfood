@@ -50,7 +50,8 @@ const listLoyal = [
       <div
         :class="[
           item === plan ? 'border-[#80509C]' : 'border-black-400',
-          'rounded-lg p-6 mx-auto border-2 md:mb-4 lg:mb-0',
+          mdAndUp ? 'mb-0' : 'mb-4',
+          'rounded-lg p-6 mx-auto border-2',
         ]"
       >
         <VRadio :value="item">
