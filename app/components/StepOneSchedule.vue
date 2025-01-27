@@ -61,39 +61,41 @@ const { mdAndDown } = useDisplay();
 </script>
 
 <template>
-  <p class="text-black-500 text-lg mb-4">Select Your Service</p>
-
   <VRow>
-    <VCol :cols="mdAndDown ? '12' : '6'">
-      <VExpansionPanels>
-        <VExpansionPanel v-for="({ title, opt }, index) in tabPabel" :key="index" :title="title">
-          <VExpansionPanelText>
-            <VRadioGroup v-model="service" color="#80509C">
-              <template v-for="({ title, price, time, desc }, subindex) in opt" :key="subindex">
-                <div :class="['rounded-lg p-6 mb-4']">
-                  <VRadio :value="title">
-                    <template #label>
-                      <div>
-                        <p class="text-base text-[#1D1F2C]">{{ title }}</p>
-                        <div class="mt-2">
-                          <div class="flex gap-2 items-center">
-                            <b class="text-xl text-[#1B223C]">$ {{ price }}</b>
-                            <b class="text-sm text-[#525B66] font-normal">{{ time }}</b>
+    <VCol :cols="mdAndDown ? '12' : '8'">
+      <div class="border border-[#ECEFF3] p-4 rounded-lg">
+        <p class="text-black-500 text-lg mb-4">Select Your Service</p>
+
+        <VExpansionPanels>
+          <VExpansionPanel v-for="({ title, opt }, index) in tabPabel" :key="index" :title="title">
+            <VExpansionPanelText>
+              <VRadioGroup v-model="service" color="#80509C">
+                <template v-for="({ title, price, time, desc }, subindex) in opt" :key="subindex">
+                  <div :class="['rounded-lg p-6 mb-4']">
+                    <VRadio :value="title">
+                      <template #label>
+                        <div>
+                          <p class="text-base text-[#1D1F2C]">{{ title }}</p>
+                          <div class="mt-2">
+                            <div class="flex gap-2 items-center">
+                              <b class="text-xl text-[#1B223C]">$ {{ price }}</b>
+                              <b class="text-sm text-[#525B66] font-normal">{{ time }}</b>
+                            </div>
                           </div>
+                          <p class="text-base text-[#4A4C56] mt-2">{{ desc }}</p>
                         </div>
-                        <p class="text-base text-[#4A4C56] mt-2">{{ desc }}</p>
-                      </div>
-                    </template>
-                  </VRadio>
-                </div>
-              </template>
-            </VRadioGroup>
-          </VExpansionPanelText>
-        </VExpansionPanel>
-      </VExpansionPanels>
+                      </template>
+                    </VRadio>
+                  </div>
+                </template>
+              </VRadioGroup>
+            </VExpansionPanelText>
+          </VExpansionPanel>
+        </VExpansionPanels>
+      </div>
     </VCol>
 
-    <VCol :cols="mdAndDown ? '12' : '6'">
+    <VCol :cols="mdAndDown ? '12' : '4'">
       <VTable>
         <thead>
           <tr class="bg-purple-soft-woosh">

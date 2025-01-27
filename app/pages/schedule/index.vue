@@ -9,14 +9,6 @@ const email = ref("");
 const phone = ref("");
 const check = ref(false);
 const loading = ref(false);
-const plan = ref(2);
-const loyalPlan = ref();
-
-const cardType = ref("");
-const cardNumber = ref("");
-const expDate = ref("");
-const ccv = ref("");
-const paymentMethod = ref("credit-card");
 
 const stepperList = 4;
 
@@ -110,34 +102,16 @@ const titleStep: { [key: number]: string } = {
                 <StepOneSchedule @update:regnumber="regNumber = $event.target.value" @next="next" />
               </div>
 
-              <div v-if="n === 2" class="mx-auto max-w-xl bg-white p-6 rounded-lg shadow-lg">
-                <StepTwo
-                  @next="next"
-                  @update:name="name = $event.target.value"
-                  @update:email="email = $event.target.value"
-                  @update:phone="phone = $event.target.value"
-                  @update:check="check = $event.target.value"
-                />
+              <div v-if="n === 2" class="mx-auto max-w-5xl">
+                <StepTwoSchedule @next="next" />
               </div>
 
-              <div v-if="n === 3" class="mx-auto max-w-4xl p-6">
-                <StepThree
-                  @update:loyalplan="loyalPlan = $event"
-                  @update:plan="plan = $event"
-                  @next="next"
-                />
+              <div v-if="n === 3" class="mx-auto max-w-5xl">
+                <StepThreeSchedule @next="next" />
               </div>
 
-              <div v-if="n === 4">
-                <StepFour
-                  :loading="loading"
-                  @update:cardtype="cardType = $event"
-                  @update:cardnumber="cardNumber = $event"
-                  @update:expdate="expDate = $event"
-                  @update:ccv="ccv = $event"
-                  @update:paymentmethod="paymentMethod = $event"
-                  @proceed="handleProceed"
-                />
+              <div v-if="n === 4" class="mx-auto max-w-2xl">
+                <StepFourSchedule :loading="loading" @proceed="handleProceed" />
               </div>
             </VStepperWindowItem>
           </VStepperWindow>
