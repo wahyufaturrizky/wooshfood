@@ -10,10 +10,10 @@
         </p>
       </div>
       <div class="hidden sm:items-center sm:gap-4 sm:flex">
-        <NuxtImg height="24" width="24" src="/sample.png" alt="logo" />
-        <NuxtImg height="24" width="24" src="/sample.png" alt="logo" />
-        <NuxtImg height="24" width="24" src="/sample.png" alt="logo" />
-        <NuxtImg height="24" width="24" src="/sample.png" alt="logo" />
+        <NuxtImg height="24" width="24" src="/cart.png" alt="logo" />
+        <NuxtImg height="24" width="24" src="/favorite.png" alt="logo" />
+        <NuxtImg height="24" width="24" src="/search.png" alt="logo" />
+        <NuxtImg height="24" width="24" src="/profile.png" alt="logo" />
       </div>
     </nav>
   </header>
