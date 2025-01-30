@@ -1,21 +1,15 @@
 <script setup lang="ts">
-const emit = defineEmits(["next", "update:name", "update:email", "update:phone"]);
+const emit = defineEmits(["next"]);
 
-const name = ref("");
-const email = ref("");
-const phone = ref("");
-const check = ref(false);
+const name = defineModel<string>("name");
+const email = defineModel<string>("email");
+const phone = defineModel<string>("phone");
+const check = defineModel<boolean>("check");
 </script>
 
 <template>
   <p class="text-black-500 text-lg mb-4">Your Name</p>
-  <VTextField
-    v-model="name"
-    color="#80509C"
-    placeholder="Enter your name"
-    variant="outlined"
-    @input="emit('update:name', $event)"
-  />
+  <VTextField v-model="name" color="#80509C" placeholder="Enter your name" variant="outlined" />
 
   <p class="text-black-500 text-lg mb-4">Your E-mail</p>
   <VTextField
@@ -24,7 +18,6 @@ const check = ref(false);
     type="email"
     placeholder="Enter your email"
     variant="outlined"
-    @input="emit('update:email', $event)"
   />
 
   <p class="text-black-500 text-lg mb-4">Your Phone Number</p>
@@ -34,7 +27,6 @@ const check = ref(false);
     type="number"
     placeholder="Enter your phone number"
     variant="outlined"
-    @input="emit('update:phone', $event)"
   />
 
   <VCheckbox v-model="check" color="#80509C">

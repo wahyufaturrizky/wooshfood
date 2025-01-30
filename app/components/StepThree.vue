@@ -1,27 +1,92 @@
 <script setup lang="ts">
-const plan = ref(2);
-const loyalPlan = ref();
+const props = defineProps({
+  name: {
+    type: String,
+    default: "",
+  },
+  email: {
+    type: String,
+    default: "",
+  },
+  regNumber: {
+    type: String,
+    default: "",
+  },
+});
 
-const emit = defineEmits(["next", "update:plan", "update:loyalplan"]);
+const { email, name, regNumber } = props || {};
+
+const plan = ref();
+const isOpenDialog = ref(false);
+
+const loyalPlan = ref();
+const loading = ref();
+
+const emit = defineEmits(["next", "update:plan"]);
 
 const { mdAndUp } = useDisplay();
 
-const isOpenDialog = ref(false);
+const { data, status } = await useAsyncData("product", async () => {
+  const [product] = await Promise.all([$fetch("/api/carwash/product")]);
 
-const listLoyal = [
-  {
-    title: "Chai Latte - Regular",
-    desc: "11 Points will be reduced from your account",
-  },
-  {
-    title: "Acai Smoothie",
-    desc: "3 Points will be reduced from your account",
-  },
-  {
-    title: "Wash products",
-    desc: "1 Points will be reduced from your account",
-  },
-];
+  return { product };
+});
+
+const { data: dataLoyaltyManagement, status: statusLoyaltyManagement } = await useAsyncData(
+  "loyalty-management",
+  async () => {
+    const [loyaltyManagementTemp] = await Promise.all([$fetch("/api/carwash/loyalty_management")]);
+
+    const loyaltyManagement = loyaltyManagementTemp.result.result.find(
+      (item) => item.name === "Loyalty Program"
+    );
+
+    return { loyaltyManagement };
+  }
+);
+
+const handleRedeem = async () => {
+  try {
+    const pointsProcessed = dataLoyaltyManagement.value?.loyaltyManagement?.redeem_rule_list.find(
+      (item) => item.id === loyalPlan.value
+    )?.point_end;
+
+    loading.value = true;
+
+    const payload = {
+      params: {
+        customer: {
+          name: name,
+          email: email,
+          registration_number: regNumber,
+        },
+        loyalty_id: loyalPlan.value,
+        date: formatDate(new Date()),
+        points_processed: pointsProcessed,
+        reference: "test-123",
+      },
+    };
+
+    const res = await $fetch("/api/carwash/redeem_points", {
+      method: "POST",
+      body: payload,
+    });
+
+    if (res?.status === "success") {
+      const { msg } = res || {};
+      useSnackbar().sendSnackbar(msg, "success");
+      resetForm();
+      loading.value = false;
+    } else {
+      useSnackbar().sendSnackbar(res.msg, "error");
+      loading.value = false;
+    }
+  } catch (error) {
+    console.log("handleProceed", error);
+
+    loading.value = false;
+  }
+};
 </script>
 
 <template>
@@ -41,39 +106,52 @@ const listLoyal = [
   </p>
 
   <VRadioGroup
+    v-if="status === 'success'"
     v-model="plan"
     color="#80509C"
     :inline="mdAndUp"
     @update:model-value="emit('update:plan', $event)"
   >
-    <template v-for="item in 3" :key="item">
+    <template
+      v-for="({ id, name, list_price }, index) in (data as any).product.result.result"
+      :key="index"
+    >
       <div
         :class="[
-          item === plan ? 'border-[#80509C]' : 'border-black-400',
+          id === plan ? 'border-[#80509C]' : 'border-black-400',
           mdAndUp ? 'mb-0' : 'mb-4',
-          'rounded-lg p-6 mx-auto border-2',
+          'rounded-lg p-6 mx-auto border-2 w-64',
         ]"
       >
-        <VRadio :value="item">
+        <VRadio :value="id">
           <template #label>
             <div>
-              <p class="text-base">Great Carwash</p>
-              <div class="mt-2"><b class="text-4xl">$350.00</b></div>
+              <p class="text-base">{{ name.length > 19 ? name.substring(0, 19) + "..." : name }}</p>
+              <div class="mt-2">
+                <b class="text-4xl">{{ formatCurrency(list_price) }}</b>
+              </div>
 
-              <VList>
+              <!-- <VList>
                 <VListItem v-for="subitem in 4" :key="subitem" class="!p-0 !min-h-0 mt-2">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <VIcon :icon="'mdi-check'" />
                     <VListItemTitle v-text="'Test'" />
                   </template>
                 </VListItem>
-              </VList>
+              </VList> -->
             </div>
           </template>
         </VRadio>
       </div>
     </template>
   </VRadioGroup>
+
+  <VSkeletonLoader
+    v-else
+    class="mx-auto"
+    elevation="12"
+    type="table-heading, list-item-two-line, image, table-tfoot"
+  />
 
   <VBtn color="#80509C" block @click="emit('next')"> Next </VBtn>
 
@@ -85,9 +163,9 @@ const listLoyal = [
   </p>
 
   <VDialog v-model="isOpenDialog" max-width="500">
-    <div class="bg-white rounded-lg shadow-lg">
+    <div v-if="statusLoyaltyManagement === 'success'" class="bg-white rounded-lg shadow-lg">
       <div class="py-4 px-6 flex items-center justify-between">
-        <p>Loyal Benefits</p>
+        <p>{{ dataLoyaltyManagement?.loyaltyManagement.product_id.name }}</p>
 
         <VIcon icon="mdi-close" @click="isOpenDialog = false" />
       </div>
@@ -98,19 +176,20 @@ const listLoyal = [
       </div>
 
       <div class="px-3 pt-4">
-        <VRadioGroup
-          v-model="loyalPlan"
-          color="#80509C"
-          @update:model-value="emit('update:loyalplan', $event)"
-        >
-          <VRadio v-for="(item, index) in listLoyal" :key="index" :value="item.title">
+        <VRadioGroup v-model="loyalPlan" color="#80509C">
+          <VRadio
+            v-for="({ name: namePoint, product_ids, id }, index) in dataLoyaltyManagement
+              ?.loyaltyManagement.redeem_rule_list"
+            :key="index"
+            :value="id"
+          >
             <template #label>
               <div class="flex flex-col mt-6">
                 <p class="text-base font-semibold text-black-500">
-                  {{ item.title }}
+                  {{ namePoint }}
                 </p>
                 <p class="text-base text-[#4A4C56] font-light">
-                  {{ item.desc }}
+                  {{ product_ids[0].name }}
                 </p>
               </div>
             </template>
@@ -119,8 +198,15 @@ const listLoyal = [
       </div>
 
       <div class="py-4 px-6">
-        <VBtn color="#80509C" @click="isOpenDialog = false"> Redeem now </VBtn>
+        <VBtn :loading="loading" color="#80509C" @click="handleRedeem"> Redeem now </VBtn>
       </div>
     </div>
+
+    <VSkeletonLoader
+      v-else
+      class="mx-auto"
+      elevation="12"
+      type="table-heading, list-item-two-line, image, table-tfoot"
+    />
   </VDialog>
 </template>

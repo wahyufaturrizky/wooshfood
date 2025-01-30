@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { ResSalesOrder } from "~/interface/common.interface";
 
-const stepper = ref(1);
+const stepper = ref(3);
 
 const regNumber = ref("");
 const name = ref("");
@@ -10,7 +10,6 @@ const phone = ref("");
 const check = ref(false);
 const loading = ref(false);
 const plan = ref(2);
-const loyalPlan = ref();
 
 const cardType = ref("");
 const cardNumber = ref("");
@@ -103,22 +102,24 @@ const handleProceed = async () => {
               class="p-4"
             >
               <div v-if="n === 1" class="mx-auto max-w-xl bg-white p-6 rounded-lg shadow-lg">
-                <StepOne @update:regnumber="regNumber = $event.target.value" @next="next" />
+                <StepOne v-model:reg-number="regNumber" @next="next" />
               </div>
 
               <div v-if="n === 2" class="mx-auto max-w-xl bg-white p-6 rounded-lg shadow-lg">
                 <StepTwo
+                  v-model:name="name"
+                  v-model:email="email"
+                  v-model:phone="phone"
+                  v-model:check="check"
                   @next="next"
-                  @update:name="name = $event.target.value"
-                  @update:email="email = $event.target.value"
-                  @update:phone="phone = $event.target.value"
-                  @update:check="check = $event.target.value"
                 />
               </div>
 
-              <div v-if="n === 3" class="mx-auto max-w-4xl p-6">
+              <div v-if="n === 3" class="mx-auto max-w-6xl p-6">
                 <StepThree
-                  @update:loyalplan="loyalPlan = $event"
+                  :name="name"
+                  :email="email"
+                  :reg-number="regNumber"
                   @update:plan="plan = $event"
                   @next="next"
                 />
@@ -126,12 +127,12 @@ const handleProceed = async () => {
 
               <div v-if="n === 4">
                 <StepFour
+                  v-model:card-type="cardType"
+                  v-model:card-number="cardNumber"
+                  v-model:exp-date="expDate"
+                  v-model:ccv="ccv"
+                  v-model:payment-method="paymentMethod"
                   :loading="loading"
-                  @update:cardtype="cardType = $event"
-                  @update:cardnumber="cardNumber = $event"
-                  @update:expdate="expDate = $event"
-                  @update:ccv="ccv = $event"
-                  @update:paymentmethod="paymentMethod = $event"
                   @proceed="handleProceed"
                 />
               </div>

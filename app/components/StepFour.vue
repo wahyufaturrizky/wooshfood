@@ -1,30 +1,26 @@
 <script setup lang="ts">
+const cardType = defineModel<string>("cardType", {
+  default: "Card Type",
+});
+const cardNumber = defineModel<string>("cardNumber");
+const expDate = defineModel<string>("expDate");
+const ccv = defineModel<string>("ccv");
+const paymentMethod = defineModel<string>("paymentMethod", {
+  default: "credit-card",
+});
+
 defineProps({
   loading: {
     type: Boolean,
   },
 });
 
-const emit = defineEmits([
-  "update:cardtype",
-  "update:cardnumber",
-  "update:expdate",
-  "update:ccv",
-  "update:paymentmethod",
-  "proceed",
-]);
+const emit = defineEmits(["proceed"]);
 
 const { mdAndDown } = useDisplay();
 
-const cardType = ref("Card Type");
-const cardNumber = ref("");
-const expDate = ref("");
-const ccv = ref("");
-const paymentMethod = ref("credit-card");
-
 const handlePayment = (val: string) => {
   paymentMethod.value = val;
-  emit("update:paymentmethod", val);
 };
 
 const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
@@ -98,7 +94,6 @@ const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
           v-model="cardType"
           variant="outlined"
           :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
-          @update:model-value="emit('update:cardtype', $event)"
         />
 
         <VTextField
@@ -106,7 +101,6 @@ const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
           color="#80509C"
           placeholder="Card Number"
           variant="outlined"
-          @update:model-value="emit('update:cardnumber', $event)"
         />
 
         <VRow>
@@ -117,7 +111,6 @@ const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
               type="number"
               placeholder="Exp Date"
               variant="outlined"
-              @update:model-value="emit('update:expdate', $event)"
             />
           </VCol>
           <VCol cols="6">
@@ -127,7 +120,6 @@ const listPayentMethod = ["credit-card", "paypal", "apple-pay"];
               type="number"
               placeholder="CCV"
               variant="outlined"
-              @update:model-value="emit('update:ccv', $event)"
             />
           </VCol>
         </VRow>

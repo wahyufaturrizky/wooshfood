@@ -1,6 +1,7 @@
 <script setup lang="ts">
-const regNumber = ref("");
-const emit = defineEmits(["next", "update:regnumber"]);
+const regNumber = defineModel<string>("regNumber");
+
+const emit = defineEmits(["next"]);
 </script>
 
 <template>
@@ -10,7 +11,6 @@ const emit = defineEmits(["next", "update:regnumber"]);
     color="#80509C"
     placeholder="Enter your registration number"
     variant="outlined"
-    @input="emit('update:regnumber', $event)"
   />
 
   <VBtn color="#80509C" block @click="emit('next')"> Next </VBtn>
