@@ -113,7 +113,7 @@ const handleRedeem = async () => {
     @update:model-value="emit('update:plan', $event)"
   >
     <template
-      v-for="({ id, name, list_price }, index) in (data as any).product.result.result"
+      v-for="({ id, name: namePlan, list_price }, index) in (data as any).product.result.result"
       :key="index"
     >
       <div
@@ -126,7 +126,9 @@ const handleRedeem = async () => {
         <VRadio :value="id">
           <template #label>
             <div>
-              <p class="text-base">{{ name.length > 19 ? name.substring(0, 19) + "..." : name }}</p>
+              <p class="text-base">
+                {{ namePlan.length > 19 ? namePlan.substring(0, 19) + "..." : namePlan }}
+              </p>
               <div class="mt-2">
                 <b class="text-4xl">{{ formatCurrency(list_price) }}</b>
               </div>
@@ -162,7 +164,7 @@ const handleRedeem = async () => {
     Redeem Royalty
   </p>
 
-  <VDialog v-model="isOpenDialog" max-width="500">
+  <VDialog v-model="isOpenDialog" scrollable max-width="500">
     <div v-if="statusLoyaltyManagement === 'success'" class="bg-white rounded-lg shadow-lg">
       <div class="py-4 px-6 flex items-center justify-between">
         <p>{{ dataLoyaltyManagement?.loyaltyManagement.product_id.name }}</p>
@@ -175,7 +177,7 @@ const handleRedeem = async () => {
         <p class="text-purple-woosh font-bold ml-2">01234</p>
       </div>
 
-      <div class="px-3 pt-4">
+      <div class="px-3 pt-4 h-[400px] overflow-y-auto">
         <VRadioGroup v-model="loyalPlan" color="#80509C">
           <VRadio
             v-for="({ name: namePoint, product_ids, id }, index) in dataLoyaltyManagement
