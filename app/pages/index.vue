@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { ResSalesOrder } from "~/interface/common.interface";
 
-const stepper = ref(3);
+const stepper = ref(1);
 
 const regNumber = ref("");
 const name = ref("");
