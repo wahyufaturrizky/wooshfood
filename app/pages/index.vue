@@ -48,7 +48,7 @@ const handleProceed = async (order) => {
             {
               name: nameOrder,
               product_qty: 1.0,
-              price_unit: 123.0,
+              price_unit: list_price * 0.1,
             },
           ],
           reference: formatDate(new Date()),
@@ -58,9 +58,12 @@ const handleProceed = async (order) => {
     console.log("res", res);
 
     if (res?.status === "success") {
-      const { msg } = res || {};
-      useSnackbar().sendSnackbar(msg, "success");
+      const { result } = res || {};
+      const { message, return_url } = result || {};
+      useSnackbar().sendSnackbar(message, "success");
       resetForm();
+
+      window.open(return_url, "_self");
       loading.value = false;
     } else {
       useSnackbar().sendSnackbar(res.msg, "error");
