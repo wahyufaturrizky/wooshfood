@@ -11,13 +11,13 @@ const check = ref(false);
 const loading = ref(false);
 const plan = ref(2);
 
-const cardType = ref("");
-const cardNumber = ref("");
-const expDate = ref("");
-const ccv = ref("");
-const paymentMethod = ref("credit-card");
+// const cardType = ref("");
+// const cardNumber = ref("");
+// const expDate = ref("");
+// const ccv = ref("");
+// const paymentMethod = ref("credit-card");
 
-const stepperList = 4;
+const stepperList = 3;
 
 const resetForm = () => {
   regNumber.value = "";
@@ -27,8 +27,10 @@ const resetForm = () => {
   check.value = false;
 };
 
-const handleProceed = async () => {
+const handleProceed = async (order) => {
   try {
+    const { name: nameOrder, list_price } = order;
+
     loading.value = true;
 
     const res: ResSalesOrder = await $fetch("/api/submit", {
@@ -42,10 +44,18 @@ const handleProceed = async () => {
             registration_number: regNumber.value,
           },
           date_order: formatDate(new Date()),
-          order_line: [],
+          order_line: [
+            {
+              name: nameOrder,
+              product_qty: 1.0,
+              price_unit: 123.0,
+            },
+          ],
+          reference: formatDate(new Date()),
         },
       },
     });
+    console.log("res", res);
 
     if (res?.status === "success") {
       const { msg } = res || {};
@@ -70,15 +80,22 @@ const handleProceed = async () => {
 
     <div class="mx-auto max-w-7xl py-11 sm:py-48 lg:py-56">
       <div class="text-center">
-        <h1 class="text-balance text-5xl font-semibold tracking-tight text-black-500 sm:text-2xl">
+        <h1 class="text-balance font-semibold tracking-tight text-black-500 text-2xl sm:text-5xl">
           Quick Car Wash Registration
         </h1>
-        <p class="mt-4 text-pretty text-lg font-medium text-black-400 sm:text-base">
+        <p class="mt-4 text-pretty mx-12 sm:mx-auto font-medium text-black-400 text-sm sm:text-lg">
           Get Started with Quick Car Wash: A Simple, Step-by-Step Registration Process!
         </p>
       </div>
 
-      <VStepper v-model="stepper" class="mt-4" :flat="true" bg-color="transparent" alt-labels>
+      <VStepper
+        v-model="stepper"
+        mobile
+        class="mt-4"
+        :flat="true"
+        bg-color="transparent"
+        alt-labels
+      >
         <template #default="{ next }">
           <VStepperHeader class="!shadow-none">
             <template v-for="n in stepperList" :key="`${n}-step`">
@@ -120,12 +137,13 @@ const handleProceed = async () => {
                   :name="name"
                   :email="email"
                   :reg-number="regNumber"
+                  :loading-proceed="loading"
                   @update:plan="plan = $event"
-                  @next="next"
+                  @proceed="handleProceed"
                 />
               </div>
 
-              <div v-if="n === 4">
+              <!-- <div v-if="n === 4">
                 <StepFour
                   v-model:card-type="cardType"
                   v-model:card-number="cardNumber"
@@ -135,7 +153,7 @@ const handleProceed = async () => {
                   :loading="loading"
                   @proceed="handleProceed"
                 />
-              </div>
+              </div> -->
             </VStepperWindowItem>
           </VStepperWindow>
         </template>

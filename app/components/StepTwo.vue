@@ -24,7 +24,7 @@ const check = defineModel<boolean>("check");
   <VTextField
     v-model="phone"
     color="#80509C"
-    type="number"
+    type="tel"
     placeholder="Enter your phone number"
     variant="outlined"
   />

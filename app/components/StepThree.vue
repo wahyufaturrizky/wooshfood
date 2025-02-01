@@ -12,6 +12,9 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  loadingProceed: {
+    type: Boolean,
+  },
 });
 
 const { email, name, regNumber } = props || {};
@@ -22,7 +25,7 @@ const isOpenDialog = ref(false);
 const loyalPlan = ref();
 const loading = ref();
 
-const emit = defineEmits(["next", "update:plan"]);
+const emit = defineEmits(["proceed", "update:plan"]);
 
 const { mdAndUp } = useDisplay();
 
@@ -63,7 +66,7 @@ const handleRedeem = async () => {
         loyalty_id: loyalPlan.value,
         date: formatDate(new Date()),
         points_processed: pointsProcessed,
-        reference: "test-123",
+        reference: formatDate(new Date()),
       },
     };
 
@@ -97,16 +100,23 @@ const handleRedeem = async () => {
     <p class="text-purple-woosh font-bold ml-2">01234</p>
   </div>
 
-  <p class="text-2xl text-center">
+  <p class="text-center text-2xl sm:text-5xl">
     Have a <span><b>NEW</b></span> car!
   </p>
 
-  <p class="mb-4 mt-1 text-pretty text-lg font-medium text-black-400 sm:text-base text-center">
+  <p class="mb-4 mt-1 text-pretty font-medium text-black-400 text-center text-sm sm:text-lg">
     Our Services are what you want! Choose one of them
   </p>
 
+  <VSkeletonLoader
+    v-if="status === 'pending'"
+    class="mx-auto"
+    elevation="12"
+    type="table-heading, list-item-two-line, image, table-tfoot"
+  />
+
   <VRadioGroup
-    v-if="status === 'success'"
+    v-else
     v-model="plan"
     color="#80509C"
     :inline="mdAndUp"
@@ -148,24 +158,36 @@ const handleRedeem = async () => {
     </template>
   </VRadioGroup>
 
-  <VSkeletonLoader
-    v-else
-    class="mx-auto"
-    elevation="12"
-    type="table-heading, list-item-two-line, image, table-tfoot"
-  />
-
-  <VBtn color="#80509C" block @click="emit('next')"> Next </VBtn>
+  <VBtn
+    color="#80509C"
+    block
+    :loading="loadingProceed"
+    @click="
+      emit(
+        'proceed',
+        (data as any).product.result.result.find((item) => item.id === plan)
+      )
+    "
+  >
+    Proceed
+  </VBtn>
 
   <p
     class="mt-4 underline text-pretty text-lg font-medium text-purple-woosh sm:text-base cursor-pointer text-center"
     @click="isOpenDialog = true"
   >
-    Redeem Royalty
+    Redeem Loyalty
   </p>
 
   <VDialog v-model="isOpenDialog" scrollable max-width="500">
-    <div v-if="statusLoyaltyManagement === 'success'" class="bg-white rounded-lg shadow-lg">
+    <VSkeletonLoader
+      v-if="statusLoyaltyManagement === 'pending'"
+      class="mx-auto"
+      elevation="12"
+      type="table-heading, list-item-two-line, image, table-tfoot"
+    />
+
+    <div v-else class="bg-white rounded-lg shadow-lg">
       <div class="py-4 px-6 flex items-center justify-between">
         <p>{{ dataLoyaltyManagement?.loyaltyManagement.product_id.name }}</p>
 
@@ -203,12 +225,5 @@ const handleRedeem = async () => {
         <VBtn :loading="loading" color="#80509C" @click="handleRedeem"> Redeem now </VBtn>
       </div>
     </div>
-
-    <VSkeletonLoader
-      v-else
-      class="mx-auto"
-      elevation="12"
-      type="table-heading, list-item-two-line, image, table-tfoot"
-    />
   </VDialog>
 </template>
