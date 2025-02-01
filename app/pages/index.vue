@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import type { ResSalesOrder } from "~/interface/common.interface";
 
+const stepperHeader = useTemplateRef("stepper-header");
+
 const stepper = ref(1);
 
 const regNumber = ref("");
@@ -72,6 +74,18 @@ const handleProceed = async (order) => {
     loading.value = false;
   }
 };
+
+const scrollToActiveStep = () => {
+  const activeStep = document.querySelector(".v-stepper-item--selected");
+  if (activeStep) {
+    activeStep.scrollIntoView({ behavior: "smooth", inline: "start" });
+  }
+};
+
+const handleNext = (next) => {
+  next();
+  scrollToActiveStep();
+};
 </script>
 
 <template>
@@ -97,7 +111,7 @@ const handleProceed = async (order) => {
         alt-labels
       >
         <template #default="{ next }">
-          <VStepperHeader class="!shadow-none">
+          <VStepperHeader ref="stepper-header" class="!shadow-none">
             <template v-for="n in stepperList" :key="`${n}-step`">
               <VStepperItem
                 color="#80509C"
@@ -119,7 +133,7 @@ const handleProceed = async (order) => {
               class="p-4"
             >
               <div v-if="n === 1" class="mx-auto max-w-xl bg-white p-6 rounded-lg shadow-lg">
-                <StepOne v-model:reg-number="regNumber" @next="next" />
+                <StepOne v-model:reg-number="regNumber" @next="handleNext(next)" />
               </div>
 
               <div v-if="n === 2" class="mx-auto max-w-xl bg-white p-6 rounded-lg shadow-lg">
@@ -128,7 +142,7 @@ const handleProceed = async (order) => {
                   v-model:email="email"
                   v-model:phone="phone"
                   v-model:check="check"
-                  @next="next"
+                  @next="handleNext(next)"
                 />
               </div>
 
