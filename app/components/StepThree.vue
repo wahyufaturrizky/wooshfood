@@ -109,7 +109,7 @@ const handleRedeem = async () => {
   </p>
 
   <VSkeletonLoader
-    v-if="status === 'pending'"
+    v-if="status !== 'success'"
     class="mx-auto"
     elevation="12"
     type="table-heading, list-item-two-line, image, table-tfoot"
@@ -181,7 +181,7 @@ const handleRedeem = async () => {
 
   <VDialog v-model="isOpenDialog" scrollable max-width="500">
     <VSkeletonLoader
-      v-if="statusLoyaltyManagement === 'pending'"
+      v-if="statusLoyaltyManagement !== 'success'"
       class="mx-auto"
       elevation="12"
       type="table-heading, list-item-two-line, image, table-tfoot"
