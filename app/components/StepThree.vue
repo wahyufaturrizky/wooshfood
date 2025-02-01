@@ -29,17 +29,11 @@ const emit = defineEmits(["proceed", "update:plan"]);
 
 const { mdAndUp } = useDisplay();
 
-const { data, status } = await useAsyncData(
-  "product",
-  async () => {
-    const [product] = await Promise.all([$fetch("/api/carwash/product")]);
+const { data, status } = await useAsyncData("product", async () => {
+  const [product] = await Promise.all([$fetch("/api/carwash/product")]);
 
-    return { product };
-  },
-  {
-    server: false,
-  }
-);
+  return { product };
+});
 
 const { data: dataLoyaltyManagement, status: statusLoyaltyManagement } = await useAsyncData(
   "loyalty-management",
