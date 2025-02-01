@@ -55,7 +55,6 @@ const handleProceed = async (order) => {
         },
       },
     });
-    console.log("res", res);
 
     if (res?.status === "success") {
       const { result } = res || {};
