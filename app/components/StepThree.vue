@@ -30,9 +30,16 @@ const emit = defineEmits(["proceed", "update:plan"]);
 const { mdAndUp } = useDisplay();
 
 const { data, status } = await useAsyncData("product", async () => {
-  const [product] = await Promise.all([$fetch("/api/carwash/product")]);
+  const [product, customerPoint] = await Promise.all([
+    $fetch("/api/carwash/product"),
+    $fetch("/api/carwash/customer_point", {
+      params: {
+        registration_number: regNumber,
+      },
+    }),
+  ]);
 
-  return { product };
+  return { product, customerPoint };
 });
 
 const { data: dataLoyaltyManagement, status: statusLoyaltyManagement } = await useAsyncData(
@@ -100,7 +107,9 @@ const handleRedeem = async () => {
     class="rounded-[32px] py-4 mb-4 px-6 flex items-center justify-center border border-[#DFE1E7] w-64 mx-auto"
   >
     <p class="font-medium">My Reward Points:</p>
-    <p class="text-purple-woosh font-bold ml-2">01234</p>
+    <p class="text-purple-woosh font-bold ml-2">
+      {{ data?.customerPoint?.result?.wk_website_loyalty_points || "" }}
+    </p>
   </div>
 
   <p class="text-center text-2xl sm:text-5xl">
@@ -199,7 +208,9 @@ const handleRedeem = async () => {
 
       <div class="bg-[#FCF8FF] py-4 px-6 flex items-center">
         <p class="font-medium">My Reward Points:</p>
-        <p class="text-purple-woosh font-bold ml-2">01234</p>
+        <p class="text-purple-woosh font-bold ml-2">
+          {{ data?.customerPoint?.result?.wk_website_loyalty_points }}
+        </p>
       </div>
 
       <div class="px-3 pt-4 h-[400px] overflow-y-auto">
