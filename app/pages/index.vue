@@ -56,14 +56,14 @@ const handleProceed = async (order) => {
       },
     });
 
-    const { result, status } = res || {};
-    const { message, return_url } = result || {};
+    const { result, status, msg } = res || {};
+    const { return_url } = result || {};
 
     if (status === "success") {
       resetForm();
       window.open(return_url, "_self");
     } else {
-      useSnackbar().sendSnackbar(message, "error");
+      useSnackbar().sendSnackbar(msg, "error");
       loading.value = false;
     }
   } catch (error) {
