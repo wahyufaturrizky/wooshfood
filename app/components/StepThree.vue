@@ -57,6 +57,8 @@ const { data: dataLoyaltyManagement, status: statusLoyaltyManagement } = await u
 
 const handleRedeem = async () => {
   try {
+    if (!loyalPlan.value) return;
+
     const pointsProcessed = dataLoyaltyManagement.value?.loyaltyManagement?.redeem_rule_list.find(
       (item) => item.id === loyalPlan.value
     )?.point_end;
@@ -212,31 +214,37 @@ const hadnleNext = () => {
         </p>
       </div>
 
-      <div class="px-3 pt-4 h-[400px] overflow-y-auto">
-        <VRadioGroup v-model="loyalPlan" color="#80509C">
-          <VRadio
-            v-for="({ name: namePoint, product_ids, id }, index) in dataLoyaltyManagement
-              ?.loyaltyManagement.redeem_rule_list"
-            :key="index"
-            :value="id"
+      <VForm @submit.prevent="handleRedeem">
+        <div class="px-3 pt-4 h-[400px] overflow-y-auto">
+          <VRadioGroup
+            v-model="loyalPlan"
+            :rules="[(val) => requiredField(val, 'You must choose a point.')]"
+            color="#80509C"
           >
-            <template #label>
-              <div class="flex flex-col mt-6">
-                <p class="text-base font-semibold text-black-500">
-                  {{ namePoint }}
-                </p>
-                <p class="text-base text-[#4A4C56] font-light">
-                  {{ product_ids[0].name }}
-                </p>
-              </div>
-            </template>
-          </VRadio>
-        </VRadioGroup>
-      </div>
+            <VRadio
+              v-for="({ name: namePoint, product_ids, id }, index) in dataLoyaltyManagement
+                ?.loyaltyManagement.redeem_rule_list"
+              :key="index"
+              :value="id"
+            >
+              <template #label>
+                <div class="flex flex-col mt-6">
+                  <p class="text-base font-semibold text-black-500">
+                    {{ namePoint }}
+                  </p>
+                  <p class="text-base text-[#4A4C56] font-light">
+                    {{ product_ids[0].name }}
+                  </p>
+                </div>
+              </template>
+            </VRadio>
+          </VRadioGroup>
+        </div>
 
-      <div class="py-4 px-6">
-        <VBtn :loading="loading" color="#80509C" @click="handleRedeem"> Redeem now </VBtn>
-      </div>
+        <div class="py-4 px-6">
+          <VBtn :loading="loading" color="#80509C" type="submit"> Redeem now </VBtn>
+        </div>
+      </VForm>
     </div>
   </VDialog>
 </template>
