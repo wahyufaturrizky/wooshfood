@@ -100,6 +100,14 @@ const handleRedeem = async () => {
     loading.value = false;
   }
 };
+
+const hadnleNext = () => {
+  if (!plan.value) return;
+  emit(
+    "proceed",
+    data.value.product.result.result.find((item) => item.id === plan.value)
+  );
+};
 </script>
 
 <template>
@@ -120,42 +128,44 @@ const handleRedeem = async () => {
     Our Services are what you want! Choose one of them
   </p>
 
-  <VSkeletonLoader
-    v-if="status !== 'success'"
-    class="mx-auto"
-    elevation="12"
-    type="table-heading, list-item-two-line, image, table-tfoot"
-  />
+  <VForm @submit.prevent="hadnleNext">
+    <VSkeletonLoader
+      v-if="status !== 'success'"
+      class="mx-auto"
+      elevation="12"
+      type="table-heading, list-item-two-line, image, table-tfoot"
+    />
 
-  <VRadioGroup
-    v-else
-    v-model="plan"
-    color="#80509C"
-    :inline="mdAndUp"
-    @update:model-value="emit('update:plan', $event)"
-  >
-    <template
-      v-for="({ id, name: namePlan, list_price }, index) in (data as any).product.result.result"
-      :key="index"
+    <VRadioGroup
+      v-else
+      v-model="plan"
+      color="#80509C"
+      :inline="mdAndUp"
+      :rules="[(val) => requiredField(val, 'You must choose a service.')]"
+      @update:model-value="emit('update:plan', $event)"
     >
-      <div
-        :class="[
-          id === plan ? 'border-[#80509C]' : 'border-black-400',
-          mdAndUp ? 'mb-0' : 'mb-4',
-          'rounded-lg p-6 mx-auto border-2 w-64',
-        ]"
+      <template
+        v-for="({ id, name: namePlan, list_price }, index) in (data as any).product.result.result"
+        :key="index"
       >
-        <VRadio :value="id">
-          <template #label>
-            <div>
-              <p class="text-base">
-                {{ namePlan.length > 19 ? namePlan.substring(0, 19) + "..." : namePlan }}
-              </p>
-              <div class="mt-2">
-                <b class="text-4xl">{{ formatCurrency(list_price) }}</b>
-              </div>
+        <div
+          :class="[
+            id === plan ? 'border-[#80509C]' : 'border-black-400',
+            mdAndUp ? 'mb-0' : 'mb-4',
+            'rounded-lg p-6 mx-auto border-2 w-64',
+          ]"
+        >
+          <VRadio :value="id">
+            <template #label>
+              <div>
+                <p class="text-base">
+                  {{ namePlan.length > 19 ? namePlan.substring(0, 19) + "..." : namePlan }}
+                </p>
+                <div class="mt-2">
+                  <b class="text-4xl">{{ formatCurrency(list_price) }}</b>
+                </div>
 
-              <!-- <VList>
+                <!-- <VList>
                 <VListItem v-for="subitem in 4" :key="subitem" class="!p-0 !min-h-0 mt-2">
                   <template #prepend>
                     <VIcon :icon="'mdi-check'" />
@@ -163,26 +173,15 @@ const handleRedeem = async () => {
                   </template>
                 </VListItem>
               </VList> -->
-            </div>
-          </template>
-        </VRadio>
-      </div>
-    </template>
-  </VRadioGroup>
+              </div>
+            </template>
+          </VRadio>
+        </div>
+      </template>
+    </VRadioGroup>
 
-  <VBtn
-    color="#80509C"
-    block
-    :loading="loadingProceed"
-    @click="
-      emit(
-        'proceed',
-        (data as any).product.result.result.find((item) => item.id === plan)
-      )
-    "
-  >
-    Proceed
-  </VBtn>
+    <VBtn color="#80509C" block :loading="loadingProceed" type="submit"> Proceed </VBtn>
+  </VForm>
 
   <p
     class="mt-4 underline text-pretty text-lg font-medium text-purple-woosh sm:text-base cursor-pointer text-center"

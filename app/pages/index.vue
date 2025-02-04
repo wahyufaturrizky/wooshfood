@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import type { ResSalesOrder } from "~/interface/common.interface";
 
-const stepperHeader = useTemplateRef("stepper-header");
-
 const stepper = ref(1);
 
 const regNumber = ref("");
@@ -111,7 +109,7 @@ const handleNext = (next) => {
         alt-labels
       >
         <template #default="{ next }">
-          <VStepperHeader ref="stepper-header" class="!shadow-none">
+          <VStepperHeader class="!shadow-none">
             <template v-for="n in stepperList" :key="`${n}-step`">
               <VStepperItem
                 color="#80509C"
