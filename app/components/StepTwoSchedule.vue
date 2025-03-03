@@ -1,4 +1,13 @@
 <script setup lang="ts">
+const { productId } = defineProps({
+  loading: {
+    type: Boolean,
+  },
+  productId: {
+    type: Array,
+  },
+});
+
 const emit = defineEmits(["next"]);
 
 const dateTime = defineModel<string>("dateTime");
@@ -36,27 +45,32 @@ const hadnleNext = () => {
           <thead>
             <tr class="bg-purple-soft-woosh">
               <th class="text-right rounded-tl-lg">Product</th>
+              <th class="text-right">Time</th>
               <th class="text-right rounded-tr-lg">Price</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td class="text-right">Wash - Large SUV</td>
-              <td class="text-right">$150.00</td>
-            </tr>
-            <tr>
-              <td class="text-right">Wash - Large SUV</td>
-              <td class="text-right">$150.00</td>
-            </tr>
-            <tr>
-              <td class="text-right">Wash - Large SUV</td>
-              <td class="text-right">$150.00</td>
-            </tr>
+            <template v-for="({ name, list_price, duration }, index) in productId" :key="index">
+              <tr>
+                <td class="text-right">{{ name }}</td>
+                <td class="text-right">{{ duration }} Min</td>
+                <td class="text-right">{{ formatCurrency(list_price) }}</td>
+              </tr>
+            </template>
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="1" class="text-right font-bold">Total</td>
-              <td class="text-right font-bold">$999.99</td>
+              <td colspan="2" class="text-right font-bold">Total</td>
+              <td class="text-right font-bold">
+                {{
+                  formatCurrency(
+                    productId.reduce(
+                      (accumulator, currentValue) => accumulator + currentValue.list_price,
+                      0
+                    )
+                  )
+                }}
+              </td>
             </tr>
           </tfoot>
         </VTable>

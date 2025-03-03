@@ -3,7 +3,7 @@ import type { ResSalesOrder } from "~/interface/common.interface";
 
 const stepper = ref(1);
 
-const service = ref("");
+const service = ref([]);
 const dateTime = ref("");
 const firstName = ref("");
 const lastName = ref("");
@@ -16,27 +16,11 @@ const street2 = ref("");
 const city = ref("");
 const state_id = ref("");
 const country_id = ref("");
-const productId = ref("");
+const productId = ref();
 const bookingId = ref("");
 const loading = ref(false);
 
 const stepperList = 4;
-
-// const resetForm = () => {
-//   service.value = "";
-//   firstName.value = "";
-//   email.value = "";
-//   phone.value = "";
-//   message.value = "";
-//   regNumber.value = "";
-//   street.value = "";
-//   city.value = "";
-//   street2.value = "";
-//   state_id.value = "";
-//   country_id.value = "";
-//   productId.value = "";
-//   booking_id.value = "";
-// };
 
 const handleProceed = async (next) => {
   try {
@@ -59,12 +43,10 @@ const handleProceed = async (next) => {
           },
           date_booking: formatDateTime(dateTime.value),
           message: message.value,
-          product_id: [
-            {
-              id: productId.value.id,
-              name: productId.value.name,
-            },
-          ],
+          product_id: productId.value.map(({ id, name }) => ({
+            id,
+            name,
+          })),
         },
       },
     });
@@ -104,6 +86,8 @@ const scrollToActiveStep = () => {
 };
 
 const handleNextStepOne = (next, val) => {
+  console.log("@val", val);
+
   productId.value = val;
   next();
   scrollToActiveStep();
@@ -121,7 +105,7 @@ const handleNext = (next) => {
 
     <div class="mx-auto max-w-7xl py-11 sm:py-48 lg:py-56">
       <div class="text-center">
-        <h1 class="text-balance text-5xl font-semibold tracking-tight text-black-500 sm:text-2xl">
+        <h1 class="text-balance text-xl font-semibold tracking-tight text-black-500 sm:text-2xl">
           Schedule Your Car Wash Quick & Easy!
         </h1>
       </div>
@@ -157,7 +141,11 @@ const handleNext = (next) => {
               </div>
 
               <div v-if="n === 2" class="mx-auto max-w-5xl">
-                <StepTwoSchedule v-model:date-time="dateTime" @next="handleNext(next)" />
+                <StepTwoSchedule
+                  v-model:date-time="dateTime"
+                  :product-id="productId"
+                  @next="handleNext(next)"
+                />
               </div>
 
               <div v-if="n === 3" class="mx-auto max-w-5xl">
@@ -169,6 +157,7 @@ const handleNext = (next) => {
                   v-model:reg-number="regNumber"
                   v-model:message="message"
                   :loading="loading"
+                  :product-id="productId"
                   @proceed="handleProceed(next)"
                 />
               </div>
