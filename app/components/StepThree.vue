@@ -25,7 +25,7 @@ const isOpenDialog = ref(false);
 const loyalPlan = ref();
 const loading = ref();
 
-const emit = defineEmits(["proceed", "update:plan"]);
+const emit = defineEmits(["proceed"]);
 
 const { mdAndUp } = useDisplay();
 
@@ -103,7 +103,7 @@ const handleRedeem = async () => {
   }
 };
 
-const hadnleNext = () => {
+const handleNext = () => {
   if (!plan.value) return;
   emit(
     "proceed",
@@ -130,7 +130,7 @@ const hadnleNext = () => {
     Our Services are what you want! Choose one of them
   </p>
 
-  <VForm @submit.prevent="hadnleNext">
+  <VForm @submit.prevent="handleNext">
     <VSkeletonLoader
       v-if="status !== 'success'"
       class="mx-auto"
@@ -144,7 +144,6 @@ const hadnleNext = () => {
       color="#80509C"
       :inline="mdAndUp"
       :rules="[(val) => requiredField(val, 'You must choose a service.')]"
-      @update:model-value="emit('update:plan', $event)"
     >
       <template
         v-for="({ id, name: namePlan, list_price }, index) in (data as any).product.result.result"

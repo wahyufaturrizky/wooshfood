@@ -9,7 +9,6 @@ const email = ref("");
 const phone = ref("");
 const check = ref(false);
 const loading = ref(false);
-const plan = ref(2);
 
 // const cardType = ref("");
 // const cardNumber = ref("");
@@ -150,7 +149,6 @@ const handleNext = (next) => {
                   :email="email"
                   :reg-number="regNumber"
                   :loading-proceed="loading"
-                  @update:plan="plan = $event"
                   @proceed="handleProceed"
                 />
               </div>
