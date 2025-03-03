@@ -75,6 +75,7 @@ const handleProceed = async (next) => {
     if (res?.status === "success") {
       useSnackbar().sendSnackbar(msg, "success");
       next();
+      scrollToActiveStep();
       loading.value = false;
       bookingId.value = booking_id;
     } else {
