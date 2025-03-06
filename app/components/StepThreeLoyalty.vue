@@ -2,7 +2,7 @@
 const emit = defineEmits(["proceed"]);
 
 const otp = ref("");
-const isOpenDialog = ref(true);
+const isOpenDialog = ref(false);
 
 const handleNext = () => {
   emit("proceed");
