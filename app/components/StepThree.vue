@@ -88,7 +88,6 @@ const handleRedeem = async () => {
       const { msg } = res || {};
       isOpenDialog.value = false;
       useSnackbar().sendSnackbar(msg, "success");
-      resetForm();
       loading.value = false;
     } else {
       isOpenDialog.value = false;
