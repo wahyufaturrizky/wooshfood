@@ -32,6 +32,10 @@ const handleNext = () => {
 
   <VDialog v-model="isOpenDialog" max-width="500">
     <div class="bg-white rounded-lg shadow-lg p-4">
+      <div class="flex justify-center items-center mb-4">
+        <NuxtImg height="101" width="101" src="/check.png" alt="check" />
+      </div>
+
       <p class="font-medium text-center">Account Creation Successful!</p>
       <p class="text-[#A8A8A8] text-sm text-center">You're in! Start earning rewards now</p>
 

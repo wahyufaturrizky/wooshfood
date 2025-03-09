@@ -12,7 +12,7 @@ const password = ref("");
 const termConditionStepOne = ref([]);
 const loading = ref(false);
 
-const stepperList = 4;
+const stepperList = 3;
 
 const handleProceed = async (next) => {
   try {
@@ -46,7 +46,6 @@ const titleStep: { [key: number]: string } = {
   1: "Create Account",
   2: "Create Password",
   3: "Confirm OTP",
-  4: "Confirmation",
 };
 
 const scrollToActiveStep = () => {
@@ -117,10 +116,6 @@ const handleNext = (next) => {
 
               <div v-if="n === 3" class="mx-auto max-w-2xl">
                 <StepThreeLoyalty :loading="loading" @proceed="handleProceed(next)" />
-              </div>
-
-              <div v-if="n === 4" class="mx-auto max-w-2xl">
-                <StepFourSchedule />
               </div>
             </VStepperWindowItem>
           </VStepperWindow>
