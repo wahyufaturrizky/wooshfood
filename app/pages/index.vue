@@ -46,8 +46,8 @@ const handleProceed = async (order) => {
           order_line: [
             {
               name: nameOrder,
-              product_qty: 1.0,
-              price_unit: 150.2,
+              product_qty: "1",
+              price_unit: list_price.toFixed(2),
             },
           ],
           reference: formatDate(new Date()),
