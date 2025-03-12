@@ -1,11 +1,11 @@
 export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig();
-  const { coreBaseUrl, xOdooApiKey } = runtimeConfig;
+  const { coreBaseUrlQR, xOdooApiKeyQR } = runtimeConfig;
 
-  const res = await $fetch(`${coreBaseUrl}/v1/api/carwash/loyalty_management`, {
+  const res = await $fetch(`${coreBaseUrlQR}/v1/api/carwash/loyalty_management`, {
     method: "GET",
     headers: {
-      "X-Odoo-Api-Key": xOdooApiKey,
+      "X-Odoo-Api-Key": xOdooApiKeyQR,
     },
   }).catch((err) => {
     return err.data;

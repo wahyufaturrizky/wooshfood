@@ -1,12 +1,12 @@
 export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig();
-  const { coreBaseUrl, xOdooApiKey } = runtimeConfig;
+  const { coreBaseUrlBooking, xOdooApiKeyBooking } = runtimeConfig;
   const body = await readBody(event);
 
-  const res = await $fetch(`${coreBaseUrl}/v1/api/booking/order`, {
+  const res = await $fetch(`${coreBaseUrlBooking}/v1/api/booking/order`, {
     method: "POST",
     headers: {
-      "X-Odoo-Api-Key": xOdooApiKey,
+      "X-Odoo-Api-Key": xOdooApiKeyBooking,
     },
     body: body,
   }).catch((err) => {

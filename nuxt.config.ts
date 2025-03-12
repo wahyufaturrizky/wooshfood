@@ -18,8 +18,12 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    coreBaseUrl: process.env.NUXT_CORE_BASE_URL,
-    xOdooApiKey: process.env.NUXT_X_ODOO_API_KEY,
+    coreBaseUrlQR: process.env.NUXT_CORE_BASE_URLQR,
+    xOdooApiKeyQR: process.env.NUXT_X_ODOO_API_KEYQR,
+    coreBaseUrlBooking: process.env.NUXT_CORE_BASE_URLBooking,
+    xOdooApiKeyBooking: process.env.NUXT_X_ODOO_API_KEYBooking,
+    coreBaseUrlLoyalty: process.env.NUXT_CORE_BASE_URLLoyalty,
+    xOdooApiKeyLoyalty: process.env.NUXT_X_ODOO_API_KEYLoyalty,
   },
 
   ssr: true,

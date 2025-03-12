@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig();
-  const { coreBaseUrl, xOdooApiKey } = runtimeConfig;
+  const { coreBaseUrlQR, xOdooApiKeyQR } = runtimeConfig;
 
   const { registration_number } = (await getQuery(event)) as {
     registration_number: string;
@@ -12,10 +12,10 @@ export default defineEventHandler(async (event) => {
     params["registration_number"] = registration_number;
   }
 
-  const res = await $fetch(`${coreBaseUrl}/v1/api/carwash/customer_point`, {
+  const res = await $fetch(`${coreBaseUrlQR}/v1/api/carwash/customer_point`, {
     method: "GET",
     headers: {
-      "X-Odoo-Api-Key": xOdooApiKey,
+      "X-Odoo-Api-Key": xOdooApiKeyQR,
     },
     params,
   }).catch((err) => {
