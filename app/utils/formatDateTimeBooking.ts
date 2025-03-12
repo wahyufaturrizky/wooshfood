@@ -24,6 +24,7 @@ export function formatDateTimeBooking(input: string): string | undefined {
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
 
-    return `${dayOfWeek}, ${day} ${month} at ${hours}:${minutes}`;
+    // return `${dayOfWeek}, ${day} ${month} at ${hours}:${minutes}`;
+    return `${dayOfWeek}, ${day} ${month}`;
   }
 }
