@@ -76,6 +76,8 @@ const hadnleNext = () => {
       </VCol>
     </VRow>
 
-    <div class="mt-4"><VBtn color="#80509C" block type="submit"> Next </VBtn></div>
+    <div class="mt-4">
+      <VBtn :disabled="!dateTime" color="#80509C" block type="submit"> Next </VBtn>
+    </div>
   </VForm>
 </template>
