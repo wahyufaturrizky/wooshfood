@@ -22,7 +22,6 @@ const hadnleNext = () => {
 
 <template>
   <VForm @submit.prevent="hadnleNext">
-    {{ dateTime }}
     <VRow>
       <VCol :cols="mdAndDown ? '12' : '8'">
         <div class="border border-[#ECEFF3] p-4 rounded-lg">
