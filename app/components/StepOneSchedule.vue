@@ -41,24 +41,27 @@ const handleNext = () => {
           <VExpansionPanels v-else>
             <VExpansionPanel
               v-for="(
-              { name,id, list_price, description_sale, duration }, index
-            ) in (databookingProduct as any)?.bookingProduct?.result?.result"
+              { booking_categories_id, product }, index
+            ) in formatBookingProduct((databookingProduct as any)?.bookingProduct?.result?.result)"
               :key="index"
-              :title="name"
+              :title="booking_categories_id?.name"
             >
-              <VExpansionPanelText>
-                <div :class="['rounded-lg mb-4']">
+              <VExpansionPanelText
+                v-for="(
+                  { name: subName, id, list_price, description_sale, duration }, subIndex
+                ) in product"
+                :key="subIndex"
+              >
+                <div>
                   <VCheckbox v-model="service" color="#80509C" :value="id">
                     <template #label>
                       <div>
-                        <p class="text-base text-[#1D1F2C]">{{ name }}</p>
-                        <div class="mt-2">
-                          <div class="flex gap-2 items-center">
-                            <b class="text-xl text-[#1B223C]">{{ formatCurrency(list_price) }}</b>
-                            <b class="text-sm text-[#525B66] font-normal">{{ duration }}</b>
-                          </div>
-                        </div>
-                        <p class="text-base text-[#4A4C56] mt-2">{{ description_sale }}</p>
+                        <p class="text-base text-[#1D1F2C]">{{ subName }}</p>
+                        <b class="text-xl text-[#1B223C]">{{ formatCurrency(list_price) }}</b>
+                        <p class="text-sm text-[#525B66] font-normal">{{ duration }} mins</p>
+                        <p v-if="description_sale" class="text-base text-[#4A4C56] mt-2">
+                          {{ description_sale }}
+                        </p>
                       </div>
                     </template>
                   </VCheckbox>
