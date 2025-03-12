@@ -4,7 +4,7 @@ import type { ResSalesOrder } from "~/interface/common.interface";
 const stepper = ref(1);
 
 const service = ref([]);
-const dateTime = ref("");
+const dateTime = ref();
 const firstName = ref("");
 const lastName = ref("");
 const email = ref("");
@@ -86,8 +86,6 @@ const scrollToActiveStep = () => {
 };
 
 const handleNextStepOne = (next, val) => {
-  console.log("@val", val);
-
   productId.value = val;
   next();
   scrollToActiveStep();

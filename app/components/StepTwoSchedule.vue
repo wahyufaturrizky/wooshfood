@@ -10,7 +10,7 @@ const { productId } = defineProps({
 
 const emit = defineEmits(["next"]);
 
-const dateTime = defineModel<string>("dateTime");
+const dateTime = defineModel("dateTime");
 
 const { mdAndDown } = useDisplay();
 
@@ -22,21 +22,20 @@ const hadnleNext = () => {
 
 <template>
   <VForm @submit.prevent="hadnleNext">
+    {{ dateTime }}
     <VRow>
       <VCol :cols="mdAndDown ? '12' : '8'">
         <div class="border border-[#ECEFF3] p-4 rounded-lg">
-          <p class="text-black-500 text-lg mb-4">Select Date & Time</p>
-
-          <VExpansionPanels>
-            <VTextField
+          <!-- <VTextField
               v-model="dateTime"
               color="#80509C"
               placeholder="Select date & time"
               variant="outlined"
               type="datetime-local"
               :rules="[(val) => requiredField(val, 'You must enter a date time.')]"
-            />
-          </VExpansionPanels>
+            /> -->
+
+          <VDatePicker v-model="dateTime" width="auto" />
         </div>
       </VCol>
 

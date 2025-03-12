@@ -10,12 +10,6 @@ const phone = ref("");
 const check = ref(false);
 const loading = ref(false);
 
-// const cardType = ref("");
-// const cardNumber = ref("");
-// const expDate = ref("");
-// const ccv = ref("");
-// const paymentMethod = ref("credit-card");
-
 const stepperList = 3;
 
 const resetForm = () => {

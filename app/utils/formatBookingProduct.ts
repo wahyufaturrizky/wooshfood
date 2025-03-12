@@ -23,7 +23,6 @@ export const formatBookingProduct = (data) => {
       transformedData[categoryIndex].product.push(transformedProduct);
     }
   });
-  console.log("@transformedData", transformedData);
 
   return transformedData;
 };
