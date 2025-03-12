@@ -10,7 +10,6 @@ const { data: databookingProduct, status: statusbookingProduct } = await useAsyn
     return { bookingProduct };
   }
 );
-console.log("@databookingProduct", databookingProduct);
 
 const { mdAndDown } = useDisplay();
 
@@ -23,12 +22,16 @@ const handleNext = () => {
     )
   );
 };
+
+const listProduct = databookingProduct.value.bookingProduct?.result?.result;
+
+const filterBookingProduct = () => listProduct?.filter((item) => service.value?.includes(item.id));
 </script>
 
 <template>
   <VForm @submit.prevent="handleNext">
     <VRow>
-      <VCol :cols="mdAndDown ? '12' : '8'">
+      <VCol :cols="mdAndDown || filterBookingProduct()?.length === 0 ? '12' : '8'">
         <div class="border border-[#ECEFF3] p-4 rounded-lg">
           <p class="text-black-500 text-lg mb-4">Select Your Service</p>
 
@@ -41,9 +44,9 @@ const handleNext = () => {
 
           <VExpansionPanels v-else>
             <VExpansionPanel
-              v-for="(
-              { booking_categories_id, product }, index
-            ) in formatBookingProduct((databookingProduct as any)?.bookingProduct?.result?.result)"
+              v-for="({ booking_categories_id, product }, index) in formatBookingProduct(
+                listProduct
+              )"
               :key="index"
               :title="booking_categories_id?.name"
             >
@@ -73,7 +76,7 @@ const handleNext = () => {
         </div>
       </VCol>
 
-      <VCol :cols="mdAndDown ? '12' : '4'">
+      <VCol v-if="filterBookingProduct()?.length" :cols="mdAndDown ? '12' : '4'">
         <VTable>
           <thead>
             <tr class="bg-purple-soft-woosh">
@@ -84,11 +87,7 @@ const handleNext = () => {
           </thead>
           <tbody>
             <template
-              v-for="(
-                { name, list_price, duration }, index
-              ) in (databookingProduct as any).bookingProduct?.result?.result.filter(
-                (item) => service?.includes(item.id) 
-              )"
+              v-for="({ name, list_price, duration }, index) in filterBookingProduct()"
               :key="index"
             >
               <tr>
