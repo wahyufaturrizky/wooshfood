@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { VTimePicker } from "vuetify/labs/VTimePicker";
+
 const { productId } = defineProps({
   loading: {
     type: Boolean,
@@ -11,11 +13,11 @@ const { productId } = defineProps({
 const emit = defineEmits(["next"]);
 
 const dateTime = defineModel("dateTime");
+const time = defineModel("time");
 
 const { mdAndDown } = useDisplay();
 
 const hadnleNext = () => {
-  if (!dateTime.value) return;
   emit("next");
 };
 </script>
@@ -25,16 +27,9 @@ const hadnleNext = () => {
     <VRow>
       <VCol :cols="mdAndDown ? '12' : '8'">
         <div class="border border-[#ECEFF3] p-4 rounded-lg">
-          <!-- <VTextField
-              v-model="dateTime"
-              color="#80509C"
-              placeholder="Select date & time"
-              variant="outlined"
-              type="datetime-local"
-              :rules="[(val) => requiredField(val, 'You must enter a date time.')]"
-            /> -->
-
           <VDatePicker v-model="dateTime" width="auto" />
+
+          <VTimePicker v-model="time" />
         </div>
       </VCol>
 
@@ -76,7 +71,7 @@ const hadnleNext = () => {
     </VRow>
 
     <div class="mt-4">
-      <VBtn :disabled="!dateTime" color="#80509C" block type="submit"> Next </VBtn>
+      <VBtn :disabled="!dateTime || !time" color="#80509C" block type="submit"> Next </VBtn>
     </div>
   </VForm>
 </template>

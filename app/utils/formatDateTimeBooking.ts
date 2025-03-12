@@ -1,4 +1,4 @@
-export function formatDateTimeBooking(input: string): string | undefined {
+export function formatDateTimeBooking(input: string, time): string | undefined {
   if (input) {
     const date = new Date(input);
 
@@ -21,10 +21,9 @@ export function formatDateTimeBooking(input: string): string | undefined {
     const dayOfWeek = daysOfWeek[date.getDay()];
     const day = String(date.getDate()).padStart(2, "0");
     const month = monthsOfYear[date.getMonth()];
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
+    // const hours = String(date.getHours()).padStart(2, "0");
+    // const minutes = String(date.getMinutes()).padStart(2, "0");
 
-    // return `${dayOfWeek}, ${day} ${month} at ${hours}:${minutes}`;
-    return `${dayOfWeek}, ${day} ${month}`;
+    return `${dayOfWeek}, ${day} ${month} at ${time}`;
   }
 }

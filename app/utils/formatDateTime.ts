@@ -1,4 +1,4 @@
-export function formatDateTime(input: string): string | undefined {
+export function formatDateTime(input: string, time: string): string | undefined {
   if (input) {
     const date = new Date(input);
 
@@ -9,6 +9,6 @@ export function formatDateTime(input: string): string | undefined {
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const seconds = String(date.getSeconds()).padStart(2, "0");
 
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    return `${year}-${month}-${day} ${time}:00`;
   }
 }

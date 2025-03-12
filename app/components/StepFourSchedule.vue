@@ -21,6 +21,9 @@ defineProps({
   bookingId: {
     type: String,
   },
+  time: {
+    type: String,
+  },
 });
 </script>
 
@@ -35,7 +38,7 @@ defineProps({
         Thank you for booking with WooshCompany!
       </p>
       <p class="text-[#525B66] text-base text-center mb-12 font-normal">
-        Your booking is scheduled for {{ formatDateTimeBooking(dateTime) }}
+        Your booking is scheduled for {{ formatDateTimeBooking(dateTime, time) }}
       </p>
 
       <p class="text-black-500 text-lg mb-4 font-medium">

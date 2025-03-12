@@ -5,6 +5,7 @@ const stepper = ref(1);
 
 const service = ref([]);
 const dateTime = ref();
+const time = ref();
 const firstName = ref("");
 const lastName = ref("");
 const email = ref("");
@@ -41,7 +42,7 @@ const handleProceed = async (next) => {
             state_id: state_id.value,
             country_id: country_id.value,
           },
-          date_booking: formatDateTime(dateTime.value),
+          date_booking: formatDateTime(dateTime.value, time.value),
           message: message.value,
           product_id: productId.value.map(({ id, name }) => ({
             id,
@@ -141,6 +142,7 @@ const handleNext = (next) => {
               <div v-if="n === 2" class="mx-auto max-w-5xl">
                 <StepTwoSchedule
                   v-model:date-time="dateTime"
+                  v-model:time="time"
                   :product-id="productId"
                   @next="handleNext(next)"
                 />
@@ -163,6 +165,7 @@ const handleNext = (next) => {
               <div v-if="n === 4" class="mx-auto max-w-2xl">
                 <StepFourSchedule
                   :date-time="dateTime"
+                  :time="time"
                   :first-name="firstName"
                   :last-name="lastName"
                   :email="email"
