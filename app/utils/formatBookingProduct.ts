@@ -1,7 +1,7 @@
 export const formatBookingProduct = (data) => {
   const transformedData = [];
 
-  data.forEach((product) => {
+  data?.forEach((product) => {
     const categoryIndex = transformedData.findIndex(
       (item) => item.booking_categories_id.id === product.booking_categories_id.id
     );

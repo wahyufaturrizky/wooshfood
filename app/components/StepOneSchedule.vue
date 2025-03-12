@@ -10,6 +10,7 @@ const { data: databookingProduct, status: statusbookingProduct } = await useAsyn
     return { bookingProduct };
   }
 );
+console.log("@databookingProduct", databookingProduct);
 
 const { mdAndDown } = useDisplay();
 
@@ -17,7 +18,7 @@ const handleNext = () => {
   if (!service.value) return;
   emit(
     "next",
-    databookingProduct.value.bookingProduct?.result.result.filter((item) =>
+    databookingProduct.value.bookingProduct?.result?.result.filter((item) =>
       service.value?.includes(item.id)
     )
   );
@@ -85,7 +86,7 @@ const handleNext = () => {
             <template
               v-for="(
                 { name, list_price, duration }, index
-              ) in (databookingProduct as any).bookingProduct?.result.result.filter(
+              ) in (databookingProduct as any).bookingProduct?.result?.result.filter(
                 (item) => service?.includes(item.id) 
               )"
               :key="index"
@@ -103,7 +104,7 @@ const handleNext = () => {
               <td class="text-right font-bold">
                 {{
                   formatCurrency(
-                    (databookingProduct as any).bookingProduct?.result.result
+                    (databookingProduct as any).bookingProduct?.result?.result
                       .filter((item) => service?.includes(item.id))
                       .reduce(
                         (accumulator, currentValue) => accumulator + currentValue.list_price,
