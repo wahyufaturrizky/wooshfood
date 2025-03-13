@@ -34,7 +34,7 @@ defineProps({
         <NuxtImg height="100" width="100" src="/complete.png" alt="logo" />
       </div>
 
-      <p class="text-black-500 text-lg text-center mb-4 font-medium">
+      <p class="text-black-500 text-center text-lg mb-4 font-medium">
         Thank you for booking with WooshCompany!
       </p>
       <p class="text-[#525B66] text-base text-center mb-12 font-normal">
