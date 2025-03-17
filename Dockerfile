@@ -3,12 +3,15 @@ FROM node:23-alpine as build-stage
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install --only=production
 COPY . .
-RUN npm run generate
+RUN npm run build
 
 # Production stage
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/.output/public /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+FROM node:23-alpine as production-stage
+
+WORKDIR /app
+COPY --from=build-stage /app ./
+EXPOSE 3000
+
+CMD ["node", ".output/server/index.mjs"]
