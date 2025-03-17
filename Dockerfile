@@ -3,7 +3,7 @@ FROM node:23-alpine as build-stage
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm install --omit=dev
 COPY . .
 RUN npm run build
 
