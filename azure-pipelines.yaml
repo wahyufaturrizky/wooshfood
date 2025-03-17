@@ -1,0 +1,87 @@
+name: $(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)
+trigger:
+  branches:
+    include:
+        - development
+        - main
+pool: 
+  vmImage: Ubuntu-latest
+
+resources:
+- repo: self
+
+variables:
+  - group: wooshfood-reference-global
+  - name: DOCKER_BUILDKIT
+    value: 1
+
+stages:
+  - stage: BuildDev
+    condition: eq(variables['Build.SourceBranchName'], 'development')
+    jobs:
+    - job:
+      displayName: Build
+      workspace:
+       clean: all
+      steps:
+      - task: Bash@3
+        displayName: Build and Push Docker Images
+        env:
+          AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+          AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+        condition: or(eq(variables['Build.SourceBranchName'], 'development'), eq(variables['Build.SourceBranch'], 'refs/heads/operations/pipeline-update'))
+        inputs:
+          targetType: 'inline'
+          script: |
+            DOCKER_REPO=wooshfood-booking
+            PORTAL_TAG=portal-dev-$(Build.BuildId)
+            #aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 333831717381.dkr.ecr.ap-southeast-1.amazonaws.com
+            aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 333831717381.dkr.ecr.ap-southeast-2.amazonaws.com
+            docker build . -f Dockerfile.portal \
+            -t 333831717381.dkr.ecr.ap-southeast-1.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG \
+            -t 333831717381.dkr.ecr.ap-southeast-2.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG
+            #docker push 333831717381.dkr.ecr.ap-southeast-1.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG
+            docker push 333831717381.dkr.ecr.ap-southeast-2.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG
+
+      - task: Bash@3
+        displayName: Deploy Portal to AWS ECS
+        env:
+          AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+          AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+        condition: succeeded()
+        inputs:
+          targetType: 'inline'
+          script: |
+            set -e
+            ECS_CLUSTER_NAME=wooshfood-nonprod
+            ECS_SERVICE_NAME=svc-wooshfood-booking-development
+            REGION=ap-southeast-1
+            ECS_TASK_DEFINITION_NAME=wooshfood-booking-development
+            DOCKER_REPO=wooshfood-booking
+            PORTAL_TAG=booking-dev-$(Build.BuildId)
+
+            CONTAINER_IMAGE=333831717381.dkr.ecr.ap-southeast-1.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG
+            echo "### Deploying: "$CONTAINER_IMAGE
+            echo "### aws ecs describe-task-definition ###"
+            TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_NAME --region $REGION)
+            echo $TASK_DEFINITION
+
+            echo "### preparing new task definition ###"
+            NEW_TASK_DEFINITION=$(echo $TASK_DEFINITION | jq --arg IMAGE "$CONTAINER_IMAGE" '.taskDefinition | .containerDefinitions[0].image = $IMAGE | del(.taskDefinitionArn) | del(.revision) | del(.status) | del(.requiresAttributes) | del(.compatibilities) | del(.registeredAt) | del(.registeredBy)')
+            echo $NEW_TASK_DEFINITION
+
+            echo "### ECS register-task-definition ###"
+            NEW_TASK_INFO=$(aws ecs register-task-definition --cli-input-json "$NEW_TASK_DEFINITION" --region $REGION)
+
+            PREVTASKDEF=$(aws ecs describe-services --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --region $REGION --query "services[].taskDefinition" --output text)
+
+            echo "### ECS update-service ###"
+            NEW_REVISION=$(echo $NEW_TASK_INFO | jq '.taskDefinition.revision')
+            aws ecs update-service --cluster $ECS_CLUSTER_NAME \
+                                  --service $ECS_SERVICE_NAME \
+                                  --task-definition $ECS_TASK_DEFINITION_NAME:${NEW_REVISION} \
+                                  --region $REGION \
+                                  --query "service.{ServiceName:serviceName, Status:status, TaskDefinition:taskDefinition, DesiredTasks:desiredCount, RunningTasks:runningCount, PendingTasks:pendingCount}"
+
+            CURRENTTASKDEF=$(aws ecs describe-services --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --region $REGION --query "services[].taskDefinition" --output text)
+            echo $PREVTASKDEF " -> " $CURRENTTASKDEF
