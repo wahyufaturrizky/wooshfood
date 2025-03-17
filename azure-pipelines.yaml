@@ -37,7 +37,7 @@ stages:
             PORTAL_TAG=portal-dev-$(Build.BuildId)
             #aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 333831717381.dkr.ecr.ap-southeast-1.amazonaws.com
             aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 333831717381.dkr.ecr.ap-southeast-2.amazonaws.com
-            docker build . -f Dockerfile.portal \
+            docker build . \
             -t 333831717381.dkr.ecr.ap-southeast-1.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG \
             -t 333831717381.dkr.ecr.ap-southeast-2.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG
             #docker push 333831717381.dkr.ecr.ap-southeast-1.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG
