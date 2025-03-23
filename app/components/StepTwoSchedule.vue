@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { VTimePicker } from "vuetify/labs/VTimePicker";
-
-const { productId } = defineProps({
+const { productId, dataSlot } = defineProps({
   loading: {
     type: Boolean,
   },
   productId: {
     type: Array,
+  },
+  dataSlot: {
+    type: Object,
   },
 });
 
@@ -17,9 +18,84 @@ const time = defineModel("time");
 
 const { mdAndDown } = useDisplay();
 
+const adapter = useDate();
+
 const hadnleNext = () => {
   emit("next");
 };
+
+const allowedDates = (val) => {
+  // Convert the `val` date to ISO format (YYYY-MM-DD)
+  const isoDate = adapter.toISO(val).split("T")[0]; // Extract only the date part
+
+  // Extract allowed dates from the JSON data
+  const extractAllowedDates = (data) => {
+    const allowedDatesSet = new Set();
+
+    data.result.slots.slots.forEach((month) => {
+      month.weeks.forEach((week) => {
+        week.forEach((day) => {
+          if (day.slots && day.slots.length > 0) {
+            allowedDatesSet.add(day.day); // Add the day to the allowed dates set
+          }
+        });
+      });
+    });
+
+    return allowedDatesSet;
+  };
+
+  // Get the allowed dates set
+  const allowedDatesSet = extractAllowedDates(dataSlot);
+
+  // Check if the date exists in the allowed dates set
+  const resAllowedDates = allowedDatesSet.has(isoDate);
+
+  return resAllowedDates;
+};
+
+// Extract time slots for the selected date
+const getTimeSlotsForDate = (selectedDate) => {
+  const isoDate = selectedDate.toISOString().split("T")[0]; // Convert to ISO format
+  let slots = [];
+
+  dataSlot?.result.slots.slots.forEach((month) => {
+    month.weeks.forEach((week) => {
+      week.forEach((day) => {
+        if (day.day === isoDate) {
+          slots = day.slots.map((slot) => slot.hours); // Extract hours
+        }
+      });
+    });
+  });
+
+  return slots;
+};
+
+// Compute time slots based on the selected date
+const timeSlots = computed(() => {
+  if (!dateTime.value) return { morning: [], afternoon: [] };
+
+  const slots = getTimeSlotsForDate(dateTime.value);
+
+  // Separate into morning and afternoon
+  const morning = slots.filter((time) => {
+    const hour = parseInt(time.split(":")[0], 10);
+    return hour < 12; // Morning is before 12:00
+  });
+
+  const afternoon = slots.filter((time) => {
+    const hour = parseInt(time.split(":")[0], 10);
+    return hour >= 12; // Afternoon is 12:00 and later
+  });
+
+  return { morning, afternoon };
+});
+
+// Watch for changes in selected time
+watch(time, (newTime) => {
+  console.log("Selected time:", newTime);
+});
 </script>
 
 <template>
@@ -27,9 +103,44 @@ const hadnleNext = () => {
     <VRow>
       <VCol :cols="mdAndDown ? '12' : '8'">
         <div class="border border-[#ECEFF3] p-4 rounded-lg">
-          <VDatePicker v-model="dateTime" width="auto" />
+          <VDatePicker
+            v-model="dateTime"
+            :min="minDateBooking()"
+            :allowed-dates="allowedDates"
+            width="auto"
+          />
 
-          <VTimePicker v-model="time" />
+          <VRadioGroup
+            v-if="timeSlots.morning.length || timeSlots.afternoon.length"
+            v-model="time"
+            color="#80509C"
+          >
+            <div class="flex justify-between px-12">
+              <div>
+                <p>Morning</p>
+                <div v-if="timeSlots.morning.length">
+                  <VRadio
+                    v-for="(time, index) in timeSlots.morning"
+                    :key="'morning-' + index"
+                    :label="time"
+                    :value="time"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <p>Afternoon</p>
+                <div v-if="timeSlots.afternoon.length">
+                  <VRadio
+                    v-for="(time, index) in timeSlots.afternoon"
+                    :key="'afternoon-' + index"
+                    :label="time"
+                    :value="time"
+                  />
+                </div>
+              </div>
+            </div>
+          </VRadioGroup>
         </div>
       </VCol>
 

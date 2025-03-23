@@ -2,6 +2,12 @@
 const emit = defineEmits(["next"]);
 const service = defineModel("service");
 
+defineProps({
+  loadingSlot: {
+    type: Boolean,
+  },
+});
+
 const { data: databookingProduct, status: statusbookingProduct } = await useAsyncData(
   "booking-product",
   async () => {
@@ -126,7 +132,9 @@ const filterBookingProduct = () => listProduct?.filter((item) => service.value?.
     </VRow>
 
     <div class="mt-4">
-      <VBtn color="#80509C" :disabled="!service?.length" block type="submit"> Next </VBtn>
+      <VBtn color="#80509C" :loading="loadingSlot" :disabled="!service?.length" block type="submit">
+        Next
+      </VBtn>
     </div>
   </VForm>
 </template>

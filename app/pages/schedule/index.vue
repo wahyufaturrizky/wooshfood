@@ -20,6 +20,8 @@ const country_id = ref("");
 const productId = ref();
 const bookingId = ref("");
 const loading = ref(false);
+const loadingSlot = ref(false);
+const dataSlot = ref();
 
 const stepperList = 4;
 
@@ -72,6 +74,41 @@ const handleProceed = async (next) => {
   }
 };
 
+const handleGetSlots = async (products, next) => {
+  try {
+    loadingSlot.value = true;
+
+    const res = await $fetch("/api/booking/slots", {
+      method: "POST",
+      body: {
+        params: {
+          product_id: products.map(({ id, name }) => ({
+            id,
+            name,
+          })),
+        },
+      },
+    });
+
+    const { result, status } = res || {};
+    const { message: msg } = result || {};
+
+    if (status === "success") {
+      useSnackbar().sendSnackbar(msg, "success");
+      dataSlot.value = res;
+      next();
+      scrollToActiveStep();
+
+      loadingSlot.value = false;
+    } else {
+      useSnackbar().sendSnackbar(msg, "error");
+      loadingSlot.value = false;
+    }
+  } catch (error) {
+    loadingSlot.value = false;
+  }
+};
+
 const titleStep: { [key: number]: string } = {
   1: "Services",
   2: "Date & Time",
@@ -88,8 +125,7 @@ const scrollToActiveStep = () => {
 
 const handleNextStepOne = (next, val) => {
   productId.value = val;
-  next();
-  scrollToActiveStep();
+  handleGetSlots(val, next);
 };
 
 const handleNext = (next) => {
@@ -135,6 +171,7 @@ const handleNext = (next) => {
               <div v-if="n === 1" class="mx-auto max-w-5xl">
                 <StepOneSchedule
                   v-model:service="service"
+                  :loading-slot="loadingSlot"
                   @next="(val) => handleNextStepOne(next, val)"
                 />
               </div>
@@ -144,6 +181,7 @@ const handleNext = (next) => {
                   v-model:date-time="dateTime"
                   v-model:time="time"
                   :product-id="productId"
+                  :data-slot="dataSlot"
                   @next="handleNext(next)"
                 />
               </div>
