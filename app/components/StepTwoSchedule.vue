@@ -115,7 +115,7 @@ watch(time, (newTime) => {
             v-model="time"
             color="#80509C"
           >
-            <div class="flex justify-between px-12">
+            <div class="flex justify-between px-auto sm:px-12">
               <div>
                 <p>Morning</p>
                 <div v-if="timeSlots.morning.length">
