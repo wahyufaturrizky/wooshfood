@@ -20,7 +20,7 @@ yarn install
 bun install
 ```
 
-## Development Server
+## Local Development
 
 Start the development server on `http://localhost:3000`:
 
@@ -40,36 +40,23 @@ bun run dev
 
 ## Production
 
-Build the application for production:
+Build and run the application for production:
 
 ```bash
 # npm
+npm install
 npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+node .output/server/index.mjs
 ```
 
-Locally preview production build:
+## Required Environment Variables
+You will need to generate an API key from Odoo site before proceeding.
+Examples:
+NUXT_CORE_BASE_URL_QR=https://development.core.wooshfood.com
+NUXT_X_ODOO_API_KEY_QR=d2198e1b0034501d96b08843f**********
 
-```bash
-# npm
-npm run preview
+NUXT_CORE_BASE_URL_BOOKING=https://development.core.wooshfood.com
+NUXT_X_ODOO_API_KEY_BOOKING=d2198e1b0034501d96b08843f**********
 
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+NUXT_CORE_BASE_URL_LOYALTY=https://development.core.wooshfood.com
+NUXT_X_ODOO_API_KEY_LOYALTY=d2198e1b0034501d96b08843f**********
