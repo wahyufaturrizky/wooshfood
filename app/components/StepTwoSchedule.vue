@@ -117,7 +117,7 @@ watch(time, (newTime) => {
           >
             <div class="flex justify-between px-auto sm:px-12">
               <div>
-                <p>Morning</p>
+                <p class="ml-2">Morning</p>
                 <div v-if="timeSlots.morning.length">
                   <VRadio
                     v-for="(time, index) in timeSlots.morning"
@@ -129,7 +129,7 @@ watch(time, (newTime) => {
               </div>
 
               <div>
-                <p>Afternoon</p>
+                <p class="ml-2">Afternoon</p>
                 <div v-if="timeSlots.afternoon.length">
                   <VRadio
                     v-for="(time, index) in timeSlots.afternoon"
