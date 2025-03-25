@@ -56,7 +56,11 @@ const allowedDates = (val) => {
 
 // Extract time slots for the selected date
 const getTimeSlotsForDate = (selectedDate) => {
-  const isoDate = selectedDate.toISOString().split("T")[0]; // Convert to ISO format
+  const year = selectedDate.getFullYear();
+  const month = String(selectedDate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(selectedDate.getDate()).padStart(2, "0");
+  const isoDate = `${year}-${month}-${day}`;
+
   let slots = [];
 
   dataSlot?.result.slots.slots.forEach((month) => {
