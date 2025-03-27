@@ -41,11 +41,7 @@ defineProps({
         Your booking is scheduled for {{ formatDateTimeBooking(dateTime, time) }}
       </p>
 
-      <p class="text-black-500 text-lg mb-4 font-medium">
-        Thank you for booking with WooshCompany!
-      </p>
-
-      <div v-if="bookingId" class="flex items-center">
+      <div v-if="bookingId" class="flex items-center justify-center">
         <p class="text-[#525B66]">Booking ID :</p>
         <p class="font-light ml-1">{{ bookingId }}</p>
       </div>

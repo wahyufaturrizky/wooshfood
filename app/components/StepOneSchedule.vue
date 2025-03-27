@@ -54,8 +54,10 @@ const filterBookingProduct = () => listProduct?.filter((item) => service.value?.
                 listProduct
               )"
               :key="index"
-              :title="booking_categories_id?.name"
             >
+              <VExpansionPanelTitle>
+                <p>{{ booking_categories_id?.name }}</p>
+              </VExpansionPanelTitle>
               <VExpansionPanelText
                 v-for="(
                   { name: subName, id, list_price, description_sale, duration }, subIndex
@@ -66,10 +68,14 @@ const filterBookingProduct = () => listProduct?.filter((item) => service.value?.
                   <VCheckbox v-model="service" color="#80509C" :value="id">
                     <template #label>
                       <div>
-                        <p class="text-base text-[#1D1F2C]">{{ subName }}</p>
-                        <b class="text-xl text-[#1B223C]">{{ formatCurrency(list_price) }}</b>
-                        <p class="text-sm text-[#525B66] font-normal">{{ duration }} mins</p>
-                        <p v-if="description_sale" class="text-base text-[#4A4C56] mt-2">
+                        <p class="text-xs sm:text-base text-[#1D1F2C]">{{ subName }}</p>
+                        <b class="text-xs sm:text-xl text-[#1B223C]">{{
+                          formatCurrency(list_price)
+                        }}</b>
+                        <p class="text-xs sm:text-sm text-[#525B66] font-normal">
+                          {{ duration }} mins
+                        </p>
+                        <p v-if="description_sale" class="text-xs sm:text-base text-[#4A4C56] mt-2">
                           {{ description_sale }}
                         </p>
                       </div>
@@ -97,16 +103,16 @@ const filterBookingProduct = () => listProduct?.filter((item) => service.value?.
               :key="index"
             >
               <tr>
-                <td class="text-right">{{ name }}</td>
-                <td class="text-right">{{ duration }} Min</td>
-                <td class="text-right">{{ formatCurrency(list_price) }}</td>
+                <td class="text-xs sm:text-base text-right">{{ name }}</td>
+                <td class="text-xs sm:text-base text-right">{{ duration }} Min</td>
+                <td class="text-xs sm:text-base text-right">{{ formatCurrency(list_price) }}</td>
               </tr>
             </template>
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="2" class="text-right font-bold">Total</td>
-              <td class="text-right font-bold">
+              <td colspan="2" class="text-xs sm:text-base text-right font-bold">Total</td>
+              <td class="text-xs sm:text-base text-right font-bold">
                 {{
                   formatCurrency(
                     (databookingProduct as any).bookingProduct?.result?.result

@@ -132,7 +132,7 @@ watch(time, (newTime) => {
                 </div>
               </div>
 
-              <div>
+              <div class="mr-4">
                 <p class="ml-2">Afternoon</p>
                 <div v-if="timeSlots.afternoon.length">
                   <VRadio
