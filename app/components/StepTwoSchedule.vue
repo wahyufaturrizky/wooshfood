@@ -66,7 +66,7 @@ const getTimeSlotsForDate = (selectedDate) => {
   dataSlot?.result.slots.slots.forEach((month) => {
     month.weeks.forEach((week) => {
       week.forEach((day) => {
-        if (day.day === isoDate) {
+        if (day.day === isoDate && day.slots.length) {
           slots = day.slots.map((slot) => slot.hours); // Extract hours
         }
       });
