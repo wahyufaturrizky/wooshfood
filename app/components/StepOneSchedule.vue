@@ -64,23 +64,18 @@ const filterBookingProduct = () => listProduct?.filter((item) => service.value?.
                 ) in product"
                 :key="subIndex"
               >
-                <div>
-                  <VCheckbox v-model="service" color="#80509C" :value="id">
-                    <template #label>
-                      <div>
-                        <p class="text-xs sm:text-base text-[#1D1F2C]">{{ subName }}</p>
-                        <b class="text-xs sm:text-xl text-[#1B223C]">{{
-                          formatCurrency(list_price)
-                        }}</b>
-                        <p class="text-xs sm:text-sm text-[#525B66] font-normal">
-                          {{ duration }} mins
-                        </p>
-                        <p v-if="description_sale" class="text-xs sm:text-base text-[#4A4C56] mt-2">
-                          {{ description_sale }}
-                        </p>
-                      </div>
-                    </template>
-                  </VCheckbox>
+                <VCheckbox v-model="service" :hide-details="true" color="#80509C" :value="id">
+                  <template #label>
+                    <p class="text-xs sm:text-base text-[#1D1F2C]">{{ subName }}</p>
+                  </template>
+                </VCheckbox>
+
+                <div class="ml-10">
+                  <b class="text-xs sm:text-xl text-[#1B223C]">{{ formatCurrency(list_price) }}</b>
+                  <p class="text-xs sm:text-sm text-[#525B66] font-normal">{{ duration }} mins</p>
+                  <p v-if="description_sale" class="text-xs sm:text-base text-[#4A4C56] mt-2">
+                    {{ description_sale }}
+                  </p>
                 </div>
               </VExpansionPanelText>
             </VExpansionPanel>

@@ -134,7 +134,10 @@ watch(time, (newTime) => {
 
               <div class="mr-4">
                 <p class="ml-2">Afternoon</p>
-                <div v-if="timeSlots.afternoon.length">
+                <div
+                  v-if="timeSlots.afternoon.length"
+                  class="sm:flex sm:flex-col sm:h-[200px] sm:flex-wrap"
+                >
                   <VRadio
                     v-for="(time, index) in timeSlots.afternoon"
                     :key="'afternoon-' + index"

@@ -41,23 +41,23 @@ defineProps({
         Your booking is scheduled for {{ formatDateTimeBooking(dateTime, time) }}
       </p>
 
-      <div v-if="bookingId" class="flex items-center justify-center">
+      <div v-if="bookingId" class="flex items-center justify-center justify-center">
         <p class="text-[#525B66]">Booking ID :</p>
         <p class="font-light ml-1">{{ bookingId }}</p>
       </div>
-      <div v-if="firstName || lastName" class="flex items-center">
+      <div v-if="firstName || lastName" class="flex items-center justify-center">
         <p class="text-[#525B66]">Name :</p>
         <p class="font-light ml-1">{{ firstName }} {{ lastName }}</p>
       </div>
-      <div v-if="email" class="flex items-center">
+      <div v-if="email" class="flex items-center justify-center">
         <p class="text-[#525B66]">Email :</p>
         <p class="font-light ml-1">{{ email }}</p>
       </div>
-      <div v-if="phone" class="flex items-center">
+      <div v-if="phone" class="flex items-center justify-center">
         <p class="text-[#525B66]">Phone :</p>
         <p class="font-light ml-1">{{ phone }}</p>
       </div>
-      <div v-if="message" class="flex items-center">
+      <div v-if="message" class="flex items-center justify-center">
         <p class="text-[#525B66]">Message :</p>
         <p class="font-light ml-1">{{ message }}</p>
       </div>
