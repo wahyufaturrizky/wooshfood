@@ -41,7 +41,7 @@ defineProps({
         Your booking is scheduled for {{ formatDateTimeBooking(dateTime, time) }}
       </p>
 
-      <div class="flex items-center">
+      <div class="flex items-center sm:ml-40">
         <div>
           <p class="text-[#525B66]">Booking ID</p>
           <p class="text-[#525B66]">Name</p>
