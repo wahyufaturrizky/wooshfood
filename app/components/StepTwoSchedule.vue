@@ -119,7 +119,7 @@ watch(time, (newTime) => {
             v-model="time"
             color="#80509C"
           >
-            <div class="flex justify-between px-auto sm:px-12">
+            <div class="flex justify-evenly px-auto sm:px-12">
               <div>
                 <p class="ml-2">Morning</p>
                 <div v-if="timeSlots.morning.length">
@@ -143,6 +143,7 @@ watch(time, (newTime) => {
                     :key="'afternoon-' + index"
                     :label="time"
                     :value="time"
+                    :class="[index > 4 ? 'sm:ml-16' : '']"
                   />
                 </div>
               </div>
