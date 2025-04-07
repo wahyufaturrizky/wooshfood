@@ -41,8 +41,8 @@ defineProps({
         Your booking is scheduled for {{ formatDateTimeBooking(dateTime, time) }}
       </p>
 
-      <div class="flex items-center sm:ml-40">
-        <div>
+      <div class="flex sm:ml-40">
+        <div class="w-40">
           <p class="text-[#525B66]">Booking ID</p>
           <p class="text-[#525B66]">Name</p>
           <p class="text-[#525B66]">Email</p>
@@ -50,12 +50,12 @@ defineProps({
           <p class="text-[#525B66]">Message</p>
         </div>
 
-        <div>
+        <div class="w-60">
           <p class="font-light ml-1">: {{ bookingId }}</p>
           <p class="font-light ml-1">: {{ firstName }} {{ lastName }}</p>
           <p class="font-light ml-1">: {{ email }}</p>
           <p class="font-light ml-1">: {{ phone }}</p>
-          <p class="font-light ml-1">: {{ message }}</p>
+          <p class="font-light ml-1 break-all">: {{ message }}</p>
         </div>
       </div>
     </VCol>
