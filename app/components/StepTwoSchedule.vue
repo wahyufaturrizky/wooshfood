@@ -131,7 +131,7 @@ watch(time, (newTime) => {
                     :key="'morning-' + index"
                     :label="time"
                     :value="time"
-                    :class="[index > 9 ? 'sm:ml-16' : '']"
+                    :class="[index > 9 ? 'sm:ml-16 sm:!flex-none' : '']"
                   />
                 </div>
               </div>
@@ -147,7 +147,7 @@ watch(time, (newTime) => {
                     :key="'afternoon-' + index"
                     :label="time"
                     :value="time"
-                    :class="[index > 9 ? 'sm:ml-16' : '']"
+                    :class="[index > 9 ? 'sm:ml-16 sm:!flex-none' : '']"
                   />
                 </div>
               </div>

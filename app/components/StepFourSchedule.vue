@@ -66,24 +66,6 @@ defineProps({
         <p class="font-light ml-1 w-10">:</p>
         <p class="font-light ml-1 break-all w-50">{{ message }}</p>
       </div>
-
-      <!-- <div class="flex sm:ml-40">
-        <div class="w-40">
-          <p class="text-[#525B66]">Booking ID</p>
-          <p class="text-[#525B66]">Name</p>
-          <p class="text-[#525B66]">Email</p>
-          <p class="text-[#525B66]">Phone</p>
-          <p class="text-[#525B66]">Message</p>
-        </div>
-
-        <div class="w-60">
-          <p class="font-light ml-1 break-all">: {{ bookingId }}</p>
-          <p class="font-light ml-1 break-all">: {{ firstName }} {{ lastName }}</p>
-          <p class="font-light ml-1 break-all">: {{ email }}</p>
-          <p class="font-light ml-1 break-all">: {{ phone }}</p>
-          <p class="font-light ml-1 break-all">: {{ message }}</p>
-        </div>
-      </div> -->
     </VCol>
   </VRow>
 </template>
