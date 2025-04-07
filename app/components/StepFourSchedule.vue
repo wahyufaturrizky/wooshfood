@@ -42,6 +42,32 @@ defineProps({
       </p>
 
       <div class="flex sm:ml-40">
+        <p class="text-[#525B66] w-40">Booking ID</p>
+        <p class="font-light ml-1 w-10">:</p>
+        <p class="font-light ml-1 break-all w-50">{{ bookingId }}</p>
+      </div>
+      <div class="flex sm:ml-40">
+        <p class="text-[#525B66] w-40">Name</p>
+        <p class="font-light ml-1 w-10">:</p>
+        <p class="font-light ml-1 break-all w-50">{{ firstName }} {{ lastName }}</p>
+      </div>
+      <div class="flex sm:ml-40">
+        <p class="text-[#525B66] w-40">Email</p>
+        <p class="font-light ml-1 w-10">:</p>
+        <p class="font-light ml-1 break-all w-50">{{ email }}</p>
+      </div>
+      <div class="flex sm:ml-40">
+        <p class="text-[#525B66] w-40">Phone</p>
+        <p class="font-light ml-1 w-10">:</p>
+        <p class="font-light ml-1 break-all w-50">{{ phone }}</p>
+      </div>
+      <div class="flex sm:ml-40">
+        <p class="text-[#525B66] w-40">Message</p>
+        <p class="font-light ml-1 w-10">:</p>
+        <p class="font-light ml-1 break-all w-50">{{ message }}</p>
+      </div>
+
+      <!-- <div class="flex sm:ml-40">
         <div class="w-40">
           <p class="text-[#525B66]">Booking ID</p>
           <p class="text-[#525B66]">Name</p>
@@ -57,7 +83,7 @@ defineProps({
           <p class="font-light ml-1 break-all">: {{ phone }}</p>
           <p class="font-light ml-1 break-all">: {{ message }}</p>
         </div>
-      </div>
+      </div> -->
     </VCol>
   </VRow>
 </template>
