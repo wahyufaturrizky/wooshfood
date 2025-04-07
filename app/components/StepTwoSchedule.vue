@@ -122,12 +122,16 @@ watch(time, (newTime) => {
             <div class="flex justify-evenly px-auto sm:px-12">
               <div>
                 <p class="ml-2">Morning</p>
-                <div v-if="timeSlots.morning.length">
+                <div
+                  v-if="timeSlots.morning.length"
+                  class="sm:flex sm:flex-col sm:h-[400px] sm:flex-wrap"
+                >
                   <VRadio
                     v-for="(time, index) in timeSlots.morning"
                     :key="'morning-' + index"
                     :label="time"
                     :value="time"
+                    :class="[index > 9 ? 'sm:ml-16' : '']"
                   />
                 </div>
               </div>
@@ -136,14 +140,14 @@ watch(time, (newTime) => {
                 <p class="ml-2">Afternoon</p>
                 <div
                   v-if="timeSlots.afternoon.length"
-                  class="sm:flex sm:flex-col sm:h-[200px] sm:flex-wrap"
+                  class="sm:flex sm:flex-col sm:h-[400px] sm:flex-wrap"
                 >
                   <VRadio
                     v-for="(time, index) in timeSlots.afternoon"
                     :key="'afternoon-' + index"
                     :label="time"
                     :value="time"
-                    :class="[index > 4 ? 'sm:ml-16' : '']"
+                    :class="[index > 9 ? 'sm:ml-16' : '']"
                   />
                 </div>
               </div>

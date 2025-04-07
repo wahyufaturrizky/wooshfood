@@ -51,10 +51,10 @@ defineProps({
         </div>
 
         <div class="w-60">
-          <p class="font-light ml-1">: {{ bookingId }}</p>
-          <p class="font-light ml-1">: {{ firstName }} {{ lastName }}</p>
-          <p class="font-light ml-1">: {{ email }}</p>
-          <p class="font-light ml-1">: {{ phone }}</p>
+          <p class="font-light ml-1 break-all">: {{ bookingId }}</p>
+          <p class="font-light ml-1 break-all">: {{ firstName }} {{ lastName }}</p>
+          <p class="font-light ml-1 break-all">: {{ email }}</p>
+          <p class="font-light ml-1 break-all">: {{ phone }}</p>
           <p class="font-light ml-1 break-all">: {{ message }}</p>
         </div>
       </div>
