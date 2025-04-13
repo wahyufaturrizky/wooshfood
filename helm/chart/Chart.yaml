@@ -1,0 +1,6 @@
+apiVersion: v2
+name: carwash-booking
+description: Helm chart for WooshFood Carwash Booking app
+type: application
+version: 0.1.0
+appVersion: "booking-dev-4191"
