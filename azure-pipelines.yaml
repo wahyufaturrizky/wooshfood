@@ -4,6 +4,10 @@ trigger:
     include:
         - development
         - main
+  paths:
+    exclude:
+      - helm/**
+      
 pool: 
   vmImage: Ubuntu-latest
 

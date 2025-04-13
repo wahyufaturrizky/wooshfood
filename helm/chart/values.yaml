@@ -13,15 +13,11 @@ resources:
 
 env:
   ENVIRONMENT: development
-  NUXT_CORE_BASE_URL_QR: https://odoo.example.com
-  NUXT_CORE_BASE_URL_BOOKING: https://odoo.example.com
-  NUXT_CORE_BASE_URL_LOYALTY: https://odoo.example.com
+  NUXT_CORE_BASE_URL_QR: https://development.core.wooshfood.com
+  NUXT_CORE_BASE_URL_BOOKING: https://development.core.wooshfood.com
+  NUXT_CORE_BASE_URL_LOYALTY: https://development.core.wooshfood.com
 
 secretEnv:
   NUXT_X_ODOO_API_KEY_QR: ""
   NUXT_X_ODOO_API_KEY_BOOKING: ""
   NUXT_X_ODOO_API_KEY_LOYALTY: ""
-
-service:
-  type: ClusterIP
-  port: 80

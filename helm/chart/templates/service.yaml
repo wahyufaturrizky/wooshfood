@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "carwash-booking.fullname" . }}
+  name: {{ .Release.Name }}
   labels:
-    app: {{ include "carwash-booking.fullname" . }}
+    app: {{ .Release.Name }}
 spec:
-type: {{ .Values.service.type | default "ClusterIP" }}
+  type: ClusterIP
+  selector:
+    app: {{ .Release.Name }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: 80
       targetPort: 3000
       protocol: TCP
       name: http
-  selector:
-    app: {{ include "carwash-booking.fullname" . }}
