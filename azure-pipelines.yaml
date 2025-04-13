@@ -7,7 +7,7 @@ trigger:
   paths:
     exclude:
       - helm/**
-      
+
 pool: 
   vmImage: Ubuntu-latest
 
@@ -33,6 +33,7 @@ stages:
         env:
           AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
           AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+          DO_TOKEN: $(DO_TOKEN)
         condition: or(eq(variables['Build.SourceBranchName'], 'development'), eq(variables['Build.SourceBranch'], 'refs/heads/operations/pipeline-update'))
         inputs:
           targetType: 'inline'
@@ -43,9 +44,12 @@ stages:
             aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 333831717381.dkr.ecr.ap-southeast-2.amazonaws.com
             docker build . \
             -t 333831717381.dkr.ecr.ap-southeast-1.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG \
-            -t 333831717381.dkr.ecr.ap-southeast-2.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG
+            -t 333831717381.dkr.ecr.ap-southeast-2.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG \
+            -t registry.digitalocean.com/wooshfood/carwash-booking:$PORTAL_TAG
             docker push 333831717381.dkr.ecr.ap-southeast-1.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG
             docker push 333831717381.dkr.ecr.ap-southeast-2.amazonaws.com/$DOCKER_REPO:$PORTAL_TAG
+            echo $DO_TOKEN | docker login registry.digitalocean.com -u "oauth" --password-stdin
+            docker push registry.digitalocean.com/wooshfood/carwash-booking:$PORTAL_TAG
 
       - task: Bash@3
         displayName: Deploy Portal to AWS ECS
@@ -89,3 +93,22 @@ stages:
 
             CURRENTTASKDEF=$(aws ecs describe-services --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --region $REGION --query "services[].taskDefinition" --output text)
             echo $PREVTASKDEF " -> " $CURRENTTASKDEF
+      - task: Bash@3
+        displayName: Update Helm Values and Commit
+        env:
+          GITHUB_PAT: $(GITHUB_PAT)
+        inputs:
+          targetType: 'inline'
+          script: |
+            git config --global user.email "devops@wooshfood.com"
+            git config --global user.name "Woosh DevOps"
+
+            git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking.git
+            cd wooshfood-carwash-booking/helm/chart
+
+            echo "Updating image tag to $PORTAL_TAG..."
+            yq eval ".image.tag = \"$PORTAL_TAG\"" -i values.yaml
+
+            git add values.yaml
+            git commit -m "ci: update image tag to $PORTAL_TAG"
+            git push origin development
