@@ -1,0 +1,28 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: carwash-booking
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    kubernetes.io/ingress.class: {{ .Values.ingress.ingressClassName | default "nginx" }}
+    cert-manager.io/issuer: {{ .Values.ingress.tls.certManager | default "true" }}
+spec:
+  rules:
+    - host: {{ .Values.ingress.hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: carwash-booking
+                port:
+                  number: 80
+  {{- if .Values.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.hostname }}
+      secretName: {{ .Values.ingress.tls.secretName }}
+  {{- end }}
+{{- end }}

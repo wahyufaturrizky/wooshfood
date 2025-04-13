@@ -11,6 +11,14 @@ resources:
     cpu: 200m
     memory: 200Mi
 
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hostname: developmentbooking.core.wooshfood.com  # Replace with your hostname
+  tls:
+    enabled: true
+    certManager: true
+    secretName: carwash-booking-tls  # Replace with your TLS secret name
 env:
   ENVIRONMENT: development
   NUXT_CORE_BASE_URL_QR: https://development.core.wooshfood.com
