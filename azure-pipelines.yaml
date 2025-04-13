@@ -105,7 +105,7 @@ stages:
 
             git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking.git
             cd wooshfood-carwash-booking/helm/chart
-
+            PORTAL_TAG=booking-dev-$(Build.BuildId)
             echo "Updating image tag to $PORTAL_TAG..."
             yq eval ".image.tag = \"$PORTAL_TAG\"" -i values.yaml
 
