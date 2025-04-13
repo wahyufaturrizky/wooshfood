@@ -15,7 +15,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: carwash-booking  # Name of your service
+                name: {{ .Release.Name }}  # Name of your service
                 port:
                   number: 80  # Port your service is exposed on
   {{- if .Values.ingress.tls.enabled }}
