@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ include "carwash-booking.fullname" . }}
 spec:
-  type: {{ .Values.service.type }}
+type: {{ .Values.service.type | default "ClusterIP" }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: 3000

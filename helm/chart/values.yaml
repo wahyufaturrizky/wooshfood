@@ -21,3 +21,7 @@ secretEnv:
   NUXT_X_ODOO_API_KEY_QR: ""
   NUXT_X_ODOO_API_KEY_BOOKING: ""
   NUXT_X_ODOO_API_KEY_LOYALTY: ""
+
+service:
+  type: ClusterIP
+  port: 80
