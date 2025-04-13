@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "carwash-booking.fullname" . }}
+  name: {{ .Release.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "carwash-booking.fullname" . }}
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ include "carwash-booking.fullname" . }}
+        app: {{ .Release.Name }}
     spec:
       containers:
         - name: app
@@ -28,17 +28,17 @@ spec:
             - name: NUXT_X_ODOO_API_KEY_QR
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "carwash-booking.fullname" . }}
+                  name: {{ .Release.Name }}
                   key: NUXT_X_ODOO_API_KEY_QR
             - name: NUXT_X_ODOO_API_KEY_BOOKING
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "carwash-booking.fullname" . }}
+                  name: {{ .Release.Name }}
                   key: NUXT_X_ODOO_API_KEY_BOOKING
             - name: NUXT_X_ODOO_API_KEY_LOYALTY
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "carwash-booking.fullname" . }}
+                  name: {{ .Release.Name }}
                   key: NUXT_X_ODOO_API_KEY_LOYALTY
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
