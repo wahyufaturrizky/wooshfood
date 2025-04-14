@@ -1,5 +1,5 @@
 image:
-  tag: booking-dev-4354
+  tag: booking-dev-2025.4.14.17
 ingress:
   hostname: developmentbooking.core.wooshfood.com
   tls:
