@@ -58,8 +58,8 @@ stages:
             git config --global user.name "Woosh DevOps"
 
             git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking.git
-            git checkout development
             cd wooshfood-carwash-booking/helm/chart
+            git checkout development
             VERSION_TAG=booking-dev-$(Build.BuildNumber)
             echo "Updating image tag to $VERSION_TAG..."
             yq eval ".image.tag = \"$VERSION_TAG\"" -i values-dev.yaml
@@ -108,8 +108,8 @@ stages:
             git config --global user.name "Woosh DevOps"
 
             git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking.git
-            git checkout main
             cd wooshfood-carwash-booking/helm/chart
+            git checkout main
             VERSION_TAG=booking-stage-$(Build.BuildNumber)
             echo "Updating image tag to $VERSION_TAG..."
             yq eval ".image.tag = \"$VERSION_TAG\"" -i values-stage.yaml
