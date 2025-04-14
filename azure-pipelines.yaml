@@ -57,8 +57,8 @@ stages:
             git config --global user.email "devops@wooshfood.com"
             git config --global user.name "Woosh DevOps"
 
-            git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking.git
-            cd wooshfood-carwash-booking/helm/chart
+            git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking-infra.git
+            cd wooshfood-carwash-booking-infra/helm/chart
             git checkout development
             VERSION_TAG=booking-dev-$(Build.BuildNumber)
             echo "Updating image tag to $VERSION_TAG..."
@@ -107,8 +107,8 @@ stages:
             git config --global user.email "devops@wooshfood.com"
             git config --global user.name "Woosh DevOps"
 
-            git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking.git
-            cd wooshfood-carwash-booking/helm/chart
+            git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking-infra.git
+            cd wooshfood-carwash-booking-infra/helm/chart
             git checkout main
             VERSION_TAG=booking-stage-$(Build.BuildNumber)
             echo "Updating image tag to $VERSION_TAG..."
