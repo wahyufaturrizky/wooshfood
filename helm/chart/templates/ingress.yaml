@@ -1,8 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: carwash-booking-ingress
-  namespace: carwash-booking
+  name: {{ .Release.Name }}-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod  # Use the Let's Encrypt ClusterIssuer
 spec:

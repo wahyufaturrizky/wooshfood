@@ -12,4 +12,3 @@ ingress:
   ingressClassName: nginx
   tls:
     enabled: true
-    certManager: true
