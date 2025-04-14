@@ -1,5 +1,5 @@
 image:
-  tag: booking-stage-latest
+  tag: booking-stage
 
 ingress:
   hostname: stagingbooking.core.wooshfood.com

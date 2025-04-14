@@ -1,5 +1,5 @@
 image:
-  tag: booking-development
+  tag: booking-dev
 
 ingress:
   hostname: developmentbooking.core.wooshfood.com
