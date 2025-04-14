@@ -1,17 +1,14 @@
 image:
-  tag: booking-dev
-
+  tag: booking-dev-4353
 ingress:
   hostname: developmentbooking.core.wooshfood.com
   tls:
     secretName: carwash-booking-dev-tls
-
 env:
   ENVIRONMENT: development
   NUXT_CORE_BASE_URL_QR: https://development.core.wooshfood.com
   NUXT_CORE_BASE_URL_BOOKING: https://development.core.wooshfood.com
   NUXT_CORE_BASE_URL_LOYALTY: https://development.core.wooshfood.com
-
 secretEnv:
   NUXT_X_ODOO_API_KEY_QR: "d2198e1b0034501d96b08843f262dec99c5d386614879455af8e47d94cf37b78"
   NUXT_X_ODOO_API_KEY_BOOKING: "d2198e1b0034501d96b08843f262dec99c5d386614879455af8e47d94cf37b78"
