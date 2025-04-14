@@ -1,13 +1,12 @@
 image:
   repository: registry.digitalocean.com/wooshfood/carwash-booking
   pullPolicy: IfNotPresent
-
+  tag: booking-dev-4348
 resources:
   limits:
     memory: 50Mi
   requests:
     memory: 50Mi
-
 ingress:
   enabled: true
   ingressClassName: nginx
