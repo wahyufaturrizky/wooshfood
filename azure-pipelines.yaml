@@ -78,7 +78,6 @@ stages:
         displayName: Build and Push Docker Images
         env:
           DO_TOKEN: $(DO_TOKEN)
-        condition: or(eq(variables['Build.SourceBranchName'], 'development'), eq(variables['Build.SourceBranch'], 'refs/heads/operations/pipeline-update'))
         inputs:
           targetType: 'inline'
           script: |
@@ -94,8 +93,9 @@ stages:
 
             echo registry.digitalocean.com/wooshfood/carwash-booking:$PORTAL_TAG > PORTAL_IMAGE.txt
             echo registry.digitalocean.com/wooshfood/carwash-booking:$PORTAL_TAG
+            echo $PORTAL_TAG > PORTAL_TAG.txt
       - task: PublishPipelineArtifact@1
-        condition: and(succeeded(),eq(variables['Build.SourceBranchName'], 'main'))
+        condition: succeeded()
         inputs:
           targetPath: '$(Pipeline.Workspace)'
           artifact: carwash-booking
