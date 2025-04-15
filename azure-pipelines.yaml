@@ -1,0 +1,126 @@
+name: $(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)
+trigger:
+  branches:
+    include:
+        - development
+        - main
+  paths:
+    exclude:
+      - helm/**
+
+pool: 
+  vmImage: Ubuntu-latest
+
+resources:
+- repo: self
+
+variables:
+  - group: wooshfood-reference-global
+  - name: DOCKER_BUILDKIT
+    value: 1
+
+stages:
+  - stage: BuildDev
+    condition: eq(variables['Build.SourceBranchName'], 'development')
+    jobs:
+    - job:
+      displayName: Build
+      workspace:
+        clean: all
+      steps:
+      - task: Bash@3
+        displayName: Build and Push Docker Images
+        env:
+          DO_TOKEN: $(DO_TOKEN)
+        condition: or(eq(variables['Build.SourceBranchName'], 'development'), eq(variables['Build.SourceBranch'], 'refs/heads/operations/pipeline-update'))
+        inputs:
+          targetType: 'inline'
+          script: |
+            # For development, use "booking-dev-<build number>" for VERSION_TAG
+            VERSION_TAG=booking-dev-$(Build.BuildNumber)
+            
+            docker build . \
+            -t registry.digitalocean.com/wooshfood/carwash-booking:$VERSION_TAG \
+            -t registry.digitalocean.com/wooshfood/carwash-booking:booking-dev
+
+            echo $DO_TOKEN | docker login registry.digitalocean.com -u "oauth" --password-stdin
+            docker push registry.digitalocean.com/wooshfood/carwash-booking:$VERSION_TAG
+            docker push registry.digitalocean.com/wooshfood/carwash-booking:booking-dev
+
+      - task: Bash@3
+        displayName: Deployment by ArgoCD
+        env:
+          GITHUB_PAT: $(GITHUB_PAT)
+        inputs:
+          targetType: 'inline'
+          script: |
+            git config --global user.email "devops@wooshfood.com"
+            git config --global user.name "Woosh DevOps"
+
+            git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking-infra.git
+            cd wooshfood-carwash-booking-infra/helm/chart
+            git checkout development
+            VERSION_TAG=booking-dev-$(Build.BuildNumber)
+            echo "Updating image tag to $VERSION_TAG..."
+            yq eval ".image.tag = \"$VERSION_TAG\"" -i values-dev.yaml
+
+            git add values-dev.yaml
+            git commit -m "ci: update image tag to $VERSION_TAG"
+            git push origin development
+
+  - stage: BuildStaging
+    condition: eq(variables['Build.SourceBranchName'], 'main')
+    jobs:
+    - job:
+      displayName: Build
+      workspace:
+        clean: all
+      steps:
+      - task: Bash@3
+        displayName: Build and Push Docker Images
+        env:
+          DO_TOKEN: $(DO_TOKEN)
+        inputs:
+          targetType: 'inline'
+          script: |
+            VERSION_TAG=booking-stage-$(Build.BuildNumber)
+            
+            docker build . \
+            -t registry.digitalocean.com/wooshfood/carwash-booking:$VERSION_TAG \
+            -t registry.digitalocean.com/wooshfood/carwash-booking:booking-stage
+    
+            echo $DO_TOKEN | docker login registry.digitalocean.com -u "oauth" --password-stdin
+            docker push registry.digitalocean.com/wooshfood/carwash-booking:$VERSION_TAG
+            docker push registry.digitalocean.com/wooshfood/carwash-booking:booking-stage
+
+            echo registry.digitalocean.com/wooshfood/carwash-booking:$VERSION_TAG > IMAGE_TAG.txt
+            echo registry.digitalocean.com/wooshfood/carwash-booking:$VERSION_TAG
+            echo $VERSION_TAG > VERSION_TAG.txt
+
+      - task: Bash@3
+        displayName: Deployment by ArgoCD
+        env:
+          GITHUB_PAT: $(GITHUB_PAT)
+        inputs:
+          targetType: 'inline'
+          script: |
+            git config --global user.email "devops@wooshfood.com"
+            git config --global user.name "Woosh DevOps"
+
+            git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking-infra.git
+            cd wooshfood-carwash-booking-infra/helm/chart
+            git checkout main
+            VERSION_TAG=booking-stage-$(Build.BuildNumber)
+            echo "Updating image tag to $VERSION_TAG..."
+            yq eval ".image.tag = \"$VERSION_TAG\"" -i values-stage.yaml
+
+            git add values-stage.yaml
+            git commit -m "ci: update image tag to $VERSION_TAG"
+            git push origin main
+
+      - task: PublishPipelineArtifact@1
+        condition: succeeded()
+        inputs:
+          targetPath: '$(Pipeline.Workspace)'
+          artifact: carwash-booking
+          publishLocation: 'pipeline'

@@ -66,7 +66,7 @@ const getTimeSlotsForDate = (selectedDate) => {
   dataSlot?.result.slots.slots.forEach((month) => {
     month.weeks.forEach((week) => {
       week.forEach((day) => {
-        if (day.day === isoDate) {
+        if (day.day === isoDate && day.slots.length) {
           slots = day.slots.map((slot) => slot.hours); // Extract hours
         }
       });
@@ -119,27 +119,35 @@ watch(time, (newTime) => {
             v-model="time"
             color="#80509C"
           >
-            <div class="flex justify-between px-auto sm:px-12">
+            <div class="flex justify-evenly px-auto sm:px-12">
               <div>
                 <p class="ml-2">Morning</p>
-                <div v-if="timeSlots.morning.length">
+                <div
+                  v-if="timeSlots.morning.length"
+                  class="sm:flex sm:flex-col sm:h-[400px] sm:flex-wrap"
+                >
                   <VRadio
                     v-for="(time, index) in timeSlots.morning"
                     :key="'morning-' + index"
                     :label="time"
                     :value="time"
+                    :class="[index > 9 ? 'sm:ml-10 sm:!flex-none' : '']"
                   />
                 </div>
               </div>
 
-              <div>
+              <div class="mr-4">
                 <p class="ml-2">Afternoon</p>
-                <div v-if="timeSlots.afternoon.length">
+                <div
+                  v-if="timeSlots.afternoon.length"
+                  class="sm:flex sm:flex-col sm:h-[400px] sm:flex-wrap"
+                >
                   <VRadio
                     v-for="(time, index) in timeSlots.afternoon"
                     :key="'afternoon-' + index"
                     :label="time"
                     :value="time"
+                    :class="[index > 9 ? 'sm:ml-10 sm:!flex-none' : '']"
                   />
                 </div>
               </div>
