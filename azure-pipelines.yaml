@@ -36,6 +36,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
+            set -e
             # For development, use "booking-dev-<build number>" for VERSION_TAG
             VERSION_TAG=booking-dev-$(Build.BuildNumber)
             
@@ -54,6 +55,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
+            set -e
             git config --global user.email "devops@wooshfood.com"
             git config --global user.name "Woosh DevOps"
 
@@ -62,9 +64,9 @@ stages:
             git checkout development
             VERSION_TAG=booking-dev-$(Build.BuildNumber)
             echo "Updating image tag to $VERSION_TAG..."
-            yq eval ".image.tag = \"$VERSION_TAG\"" -i values-dev.yaml
+            yq eval ".image.tag = \"$VERSION_TAG\"" -i values.yaml
 
-            git add values-dev.yaml
+            git add values.yaml
             git commit -m "ci: update image tag to $VERSION_TAG"
             git push origin development
 
@@ -83,6 +85,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
+            set -e
             VERSION_TAG=booking-stage-$(Build.BuildNumber)
             
             docker build . \
@@ -104,6 +107,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
+            set -e
             git config --global user.email "devops@wooshfood.com"
             git config --global user.name "Woosh DevOps"
 
@@ -112,9 +116,9 @@ stages:
             git checkout main
             VERSION_TAG=booking-stage-$(Build.BuildNumber)
             echo "Updating image tag to $VERSION_TAG..."
-            yq eval ".image.tag = \"$VERSION_TAG\"" -i values-stage.yaml
+            yq eval ".image.tag = \"$VERSION_TAG\"" -i values.yaml
 
-            git add values-stage.yaml
+            git add values.yaml
             git commit -m "ci: update image tag to $VERSION_TAG"
             git push origin main
 
