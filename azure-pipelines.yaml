@@ -70,7 +70,9 @@ stages:
             git add values.yaml
             git commit -m "ci: update image tag to $VERSION_TAG"
             git push origin development
-
+            argocd login https://argo.tc.wooshfood.com --auth-token $ARGOCD_TOKEN
+            argocd app sync carwash-booking-dev --wait
+            
   - stage: BuildStaging
     condition: eq(variables['Build.SourceBranchName'], 'main')
     jobs:
