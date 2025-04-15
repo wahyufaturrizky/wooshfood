@@ -8,8 +8,8 @@ trigger:
     exclude:
       - helm/**
 
-pool: 
-  vmImage: Ubuntu-latest
+pool: CloudProvider
+  # vmImage: Ubuntu-latest
 
 resources:
 - repo: self
