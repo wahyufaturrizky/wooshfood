@@ -8,8 +8,8 @@ trigger:
     exclude:
       - helm/**
 
-pool: 
-  vmImage: Ubuntu-latest
+pool: CloudProvider
+  # vmImage: Ubuntu-latest
 
 resources:
 - repo: self
@@ -52,6 +52,7 @@ stages:
         displayName: Deployment by ArgoCD
         env:
           GITHUB_PAT: $(GITHUB_PAT)
+          ARGOCD_TOKEN: $(ARGOCD_TOKEN)
         inputs:
           targetType: 'inline'
           script: |
@@ -104,6 +105,7 @@ stages:
         displayName: Deployment by ArgoCD
         env:
           GITHUB_PAT: $(GITHUB_PAT)
+          ARGOCD_TOKEN: $(ARGOCD_TOKEN)
         inputs:
           targetType: 'inline'
           script: |
@@ -112,15 +114,23 @@ stages:
             git config --global user.name "Woosh DevOps"
 
             git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking-infra.git
-            cd wooshfood-carwash-booking-infra/argocd/environments/staging
-            git checkout main
+            cd wooshfood-carwash-booking-infra
+
+            # Set version tag
             VERSION_TAG=booking-stage-$(Build.BuildNumber)
             echo "Updating image tag to $VERSION_TAG..."
-            yq eval ".image.tag = \"$VERSION_TAG\"" -i values.yaml
 
-            git add values.yaml
+            # === Checkout main branch, update values.yaml, and push ===
+            git checkout main
+            yq eval ".image.tag = \"$VERSION_TAG\"" -i argocd/environments/staging/values.yaml
+            git add argocd/environments/staging/values.yaml
             git commit -m "ci: update image tag to $VERSION_TAG"
             git push origin main
+
+            # === Checkout development branch, merge from main, and push ===
+            git checkout development
+            git merge main --no-edit
+            git push origin development
 
       - task: PublishPipelineArtifact@1
         condition: succeeded()
