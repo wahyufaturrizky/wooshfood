@@ -116,25 +116,20 @@ stages:
             git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking-infra.git
             cd wooshfood-carwash-booking-infra
 
-            # === Update staging (main branch) ===
-            cd argocd/environments/staging
-            git checkout main
-            VERSION_TAG_STAGE=booking-stage-$(Build.BuildNumber)
-            echo "Updating image tag to $VERSION_TAG_STAGE in staging..."
-            yq eval ".image.tag = \"$VERSION_TAG_STAGE\"" -i values.yaml
-            git add values.yaml
-            git commit -m "ci: update image tag to $VERSION_TAG_STAGE"
-            git push origin main
-            cd ../../..
+            # Set version tag
+            VERSION_TAG=booking-stage-$(Build.BuildNumber)
+            echo "Updating image tag to $VERSION_TAG..."
 
-            # === Update development (development branch) ===
-            cd argocd/environments/development
+            # === Checkout main branch, update values.yaml, and push ===
+            git checkout main
+            yq eval ".image.tag = \"$VERSION_TAG\"" -i argocd/environments/staging/values.yaml
+            git add argocd/environments/staging/values.yaml
+            git commit -m "ci: update image tag to $VERSION_TAG"
+            git push origin main
+
+            # === Checkout development branch, merge from main, and push ===
             git checkout development
-            VERSION_TAG_DEV=booking-dev-$(Build.BuildNumber)
-            echo "Updating image tag to $VERSION_TAG_DEV in development..."
-            yq eval ".image.tag = \"$VERSION_TAG_DEV\"" -i values.yaml
-            git add values.yaml
-            git commit -m "ci: update image tag to $VERSION_TAG_DEV"
+            git merge main --no-edit
             git push origin development
 
       - task: PublishPipelineArtifact@1
