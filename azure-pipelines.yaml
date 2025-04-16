@@ -70,7 +70,7 @@ stages:
             git push origin development
 
             argocd login argo.tc.wooshfood.com --grpc-web --username $ARGOCD_USER --password $ARGOCD_TOKEN
-            argocd app sync carwash-booking-dev --wait
+            argocd app sync carwash-booking-dev
 
   - stage: BuildStaging
     condition: eq(variables['Build.SourceBranchName'], 'main')
