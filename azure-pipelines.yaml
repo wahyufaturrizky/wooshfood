@@ -69,8 +69,8 @@ stages:
             git commit -m "ci: update image tag to $VERSION_TAG"
             git push origin development
 
-            argocd login https://argo.tc.wooshfood.com --grpc-web --username $ARGOCD_USER --password $ARGOCD_TOKEN
-            argocd app sync https://carwash-booking-dev --wait
+            argocd login argo.tc.wooshfood.com --grpc-web --username $ARGOCD_USER --password $ARGOCD_TOKEN
+            argocd app sync carwash-booking-dev --wait
 
   - stage: BuildStaging
     condition: eq(variables['Build.SourceBranchName'], 'main')
