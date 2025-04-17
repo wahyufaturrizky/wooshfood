@@ -78,9 +78,7 @@ const getTimeSlotsForDate = (selectedDate) => {
 
 // Compute time slots based on the selected date
 const timeSlots = computed(() => {
-  if (!dateTime.value) return { morning: [], afternoon: [] };
-
-  const slots = getTimeSlotsForDate(dateTime.value);
+  const slots = getTimeSlotsForDate(dateTime.value || new Date());
 
   // Separate into morning and afternoon
   const morning = slots.filter((time) => {
@@ -124,7 +122,10 @@ watch(time, (newTime) => {
                 <p class="ml-2">Morning</p>
                 <div
                   v-if="timeSlots.morning.length"
-                  class="sm:flex sm:flex-col sm:h-[400px] sm:flex-wrap"
+                  :class="[
+                    timeSlots.morning.length > 10 ? 'sm:h-[400px]' : '',
+                    'sm:flex sm:flex-col sm:flex-wrap',
+                  ]"
                 >
                   <VRadio
                     v-for="(time, index) in timeSlots.morning"
@@ -140,7 +141,10 @@ watch(time, (newTime) => {
                 <p class="ml-2">Afternoon</p>
                 <div
                   v-if="timeSlots.afternoon.length"
-                  class="sm:flex sm:flex-col sm:h-[400px] sm:flex-wrap"
+                  :class="[
+                    timeSlots.afternoon.length > 10 ? 'sm:h-[400px]' : '',
+                    'sm:flex sm:flex-col sm:flex-wrap',
+                  ]"
                 >
                   <VRadio
                     v-for="(time, index) in timeSlots.afternoon"
