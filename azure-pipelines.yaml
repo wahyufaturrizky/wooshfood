@@ -8,8 +8,8 @@ trigger:
     exclude:
       - helm/**
 
-pool: 
-  vmImage: Ubuntu-latest
+pool: CloudProvider
+  # vmImage: Ubuntu-latest
 
 resources:
 - repo: self
@@ -25,8 +25,6 @@ stages:
     jobs:
     - job:
       displayName: Build
-      workspace:
-        clean: all
       steps:
       - task: Bash@3
         displayName: Build and Push Docker Images
@@ -36,6 +34,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
+            set -e
             # For development, use "booking-dev-<build number>" for VERSION_TAG
             VERSION_TAG=booking-dev-$(Build.BuildNumber)
             
@@ -51,30 +50,33 @@ stages:
         displayName: Deployment by ArgoCD
         env:
           GITHUB_PAT: $(GITHUB_PAT)
+          ARGOCD_TOKEN: $(ARGOCD_TOKEN)
         inputs:
           targetType: 'inline'
           script: |
+            set -e
             git config --global user.email "devops@wooshfood.com"
             git config --global user.name "Woosh DevOps"
 
             git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking-infra.git
-            cd wooshfood-carwash-booking-infra/helm/chart
+            cd wooshfood-carwash-booking-infra/argocd/environments/development
             git checkout development
             VERSION_TAG=booking-dev-$(Build.BuildNumber)
             echo "Updating image tag to $VERSION_TAG..."
-            yq eval ".image.tag = \"$VERSION_TAG\"" -i values-dev.yaml
+            yq eval ".image.tag = \"$VERSION_TAG\"" -i values.yaml
 
-            git add values-dev.yaml
+            git add values.yaml
             git commit -m "ci: update image tag to $VERSION_TAG"
             git push origin development
+
+            argocd login argo.tc.wooshfood.com --grpc-web --username $ARGOCD_USER --password $ARGOCD_TOKEN
+            argocd app sync carwash-booking-dev
 
   - stage: BuildStaging
     condition: eq(variables['Build.SourceBranchName'], 'main')
     jobs:
     - job:
       displayName: Build
-      workspace:
-        clean: all
       steps:
       - task: Bash@3
         displayName: Build and Push Docker Images
@@ -83,6 +85,7 @@ stages:
         inputs:
           targetType: 'inline'
           script: |
+            set -e
             VERSION_TAG=booking-stage-$(Build.BuildNumber)
             
             docker build . \
@@ -101,22 +104,32 @@ stages:
         displayName: Deployment by ArgoCD
         env:
           GITHUB_PAT: $(GITHUB_PAT)
+          ARGOCD_TOKEN: $(ARGOCD_TOKEN)
         inputs:
           targetType: 'inline'
           script: |
+            set -e
             git config --global user.email "devops@wooshfood.com"
             git config --global user.name "Woosh DevOps"
 
             git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/wooshfood-carwash-booking-infra.git
-            cd wooshfood-carwash-booking-infra/helm/chart
-            git checkout main
+            cd wooshfood-carwash-booking-infra
+
+            # Set version tag
             VERSION_TAG=booking-stage-$(Build.BuildNumber)
             echo "Updating image tag to $VERSION_TAG..."
-            yq eval ".image.tag = \"$VERSION_TAG\"" -i values-stage.yaml
 
-            git add values-stage.yaml
+            # === Checkout main branch, update values.yaml, and push ===
+            git checkout main
+            yq eval ".image.tag = \"$VERSION_TAG\"" -i argocd/environments/staging/values.yaml
+            git add argocd/environments/staging/values.yaml
             git commit -m "ci: update image tag to $VERSION_TAG"
             git push origin main
+
+            # === Checkout development branch, merge from main, and push ===
+            git checkout development
+            git merge main --no-edit
+            git push origin development
 
       - task: PublishPipelineArtifact@1
         condition: succeeded()
