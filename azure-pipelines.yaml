@@ -8,8 +8,8 @@ trigger:
     exclude:
       - helm/**
 
-pool: CloudProvider
-  # vmImage: Ubuntu-latest
+pool:
+  vmImage: Ubuntu-latest
 
 resources:
 - repo: self
@@ -30,7 +30,6 @@ stages:
         displayName: Build and Push Docker Images
         env:
           DO_TOKEN: $(DO_TOKEN)
-        condition: or(eq(variables['Build.SourceBranchName'], 'development'), eq(variables['Build.SourceBranch'], 'refs/heads/operations/pipeline-update'))
         inputs:
           targetType: 'inline'
           script: |
@@ -66,11 +65,18 @@ stages:
             yq eval ".image.tag = \"$VERSION_TAG\"" -i values.yaml
 
             git add values.yaml
-            git commit -m "ci: update image tag to $VERSION_TAG"
-            git push origin development
+
+            # Only commit if there are changes
+            if ! git diff --cached --quiet; then
+              git commit -m "ci: update image tag to $VERSION_TAG"
+              git push origin development
+            else
+              echo "No changes to commit"
+            fi
 
             argocd login argo.tc.wooshfood.com --grpc-web --username $ARGOCD_USER --password $ARGOCD_TOKEN
             argocd app sync carwash-booking-dev
+
 
   - stage: BuildStaging
     condition: eq(variables['Build.SourceBranchName'], 'main')
@@ -123,13 +129,25 @@ stages:
             git checkout main
             yq eval ".image.tag = \"$VERSION_TAG\"" -i argocd/environments/staging/values.yaml
             git add argocd/environments/staging/values.yaml
-            git commit -m "ci: update image tag to $VERSION_TAG"
-            git push origin main
+
+            # Only commit if there are changes
+            if ! git diff --cached --quiet; then
+              git commit -m "ci: update image tag to $VERSION_TAG"
+              git push origin main
+            else
+              echo "No changes to commit on main"
+            fi
 
             # === Checkout development branch, merge from main, and push ===
             git checkout development
-            git merge main --no-edit
-            git push origin development
+            # Only merge if there are new commits from main
+            if ! git merge-base --is-ancestor main development; then
+              git merge main --no-edit
+              git push origin development
+            else
+              echo "Development branch already up to date with main"
+            fi
+
 
       - task: PublishPipelineArtifact@1
         condition: succeeded()
