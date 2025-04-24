@@ -58,7 +58,7 @@ const handleProceed = async (next) => {
     const { message: msg, booking_id } = result || {};
 
     if (res?.status === "success") {
-      useSnackbar().sendSnackbar(msg, "success");
+      // useSnackbar().sendSnackbar(msg, "success");
       next();
       scrollToActiveStep();
       loading.value = false;
@@ -94,7 +94,7 @@ const handleGetSlots = async (products, next) => {
     const { message: msg } = result || {};
 
     if (status === "success") {
-      useSnackbar().sendSnackbar(msg, "success");
+      // useSnackbar().sendSnackbar(msg, "success");
       dataSlot.value = res;
       next();
       scrollToActiveStep();
