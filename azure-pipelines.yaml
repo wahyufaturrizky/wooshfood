@@ -76,8 +76,26 @@ stages:
 
             argocd login argo.tc.wooshfood.com --grpc-web --username $ARGOCD_USER --password $ARGOCD_TOKEN
             argocd app sync carwash-booking-dev
+            #####
+            git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/gitops-infra-stack.git
+            cd gitops-infra-stack/values/carwash-booking
+            git checkout development
+            VERSION_TAG=booking-dev-$(Build.BuildNumber)
+            echo "Updating image tag to $VERSION_TAG..."
+            yq eval ".image.tag = \"$VERSION_TAG\"" -i development.yaml
 
+            git add development.yaml
 
+            # Only commit if there are changes
+            if ! git diff --cached --quiet; then
+              git commit -m "ci: update image tag to $VERSION_TAG"
+              git push origin development
+            else
+              echo "No changes to commit"
+            fi
+
+            argocd login argo.tc.wooshfood.com --grpc-web --username $ARGOCD_USER --password $ARGOCD_TOKEN
+            argocd app sync carwash-booking-dev
   - stage: BuildStaging
     condition: eq(variables['Build.SourceBranchName'], 'main')
     jobs:
@@ -147,8 +165,36 @@ stages:
             else
               echo "Development branch already up to date with main"
             fi
+            ######
+            git clone https://$(GITHUB_PAT)@github.com/WooshFood-Dev/gitops-infra-stack.git
+            cd gitops-infra-stack
 
+            # Set version tag
+            VERSION_TAG=booking-stage-$(Build.BuildNumber)
+            echo "Updating image tag to $VERSION_TAG..."
 
+            # === Checkout main branch, update values.yaml, and push ===
+            git checkout main
+            yq eval ".image.tag = \"$VERSION_TAG\"" -i values/carwash-booking/staging.yaml
+            git add values/carwash-booking/staging.yaml
+
+            # Only commit if there are changes
+            if ! git diff --cached --quiet; then
+              git commit -m "ci: update image tag to $VERSION_TAG"
+              git push origin main
+            else
+              echo "No changes to commit on main"
+            fi
+
+            # === Checkout development branch, merge from main, and push ===
+            git checkout development
+            # Only merge if there are new commits from main
+            if ! git merge-base --is-ancestor main development; then
+              git merge main --no-edit
+              git push origin development
+            else
+              echo "Development branch already up to date with main"
+            fi
       - task: PublishPipelineArtifact@1
         condition: succeeded()
         inputs:
