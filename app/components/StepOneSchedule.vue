@@ -2,6 +2,9 @@
 const emit = defineEmits(["next"]);
 const service = defineModel("service");
 
+const showDesc = ref(false);
+const showDescId = ref();
+
 defineProps({
   loadingSlot: {
     type: Boolean,
@@ -32,12 +35,20 @@ const handleNext = () => {
 const listProduct = databookingProduct.value.bookingProduct?.result?.result;
 
 const filterBookingProduct = () => listProduct?.filter((item) => service.value?.includes(item.id));
+
+const handleShowDesc = (id: string) => {
+  if (id === showDescId.value) {
+    showDescId.value = null;
+  } else {
+    showDescId.value = id;
+  }
+};
 </script>
 
 <template>
   <VForm @submit.prevent="handleNext">
     <VRow>
-      <VCol :cols="mdAndDown || filterBookingProduct()?.length === 0 ? '12' : '8'">
+      <VCol :cols="mdAndDown || filterBookingProduct()?.length === 0 ? '12' : '7'">
         <div class="border border-[#ECEFF3] p-4 rounded-lg">
           <p class="text-black-500 text-lg mb-4">Select Your Service</p>
 
@@ -64,16 +75,26 @@ const filterBookingProduct = () => listProduct?.filter((item) => service.value?.
                 ) in product"
                 :key="subIndex"
               >
-                <VCheckbox v-model="service" :hide-details="true" color="#80509C" :value="id">
-                  <template #label>
-                    <p class="text-xs sm:text-base text-[#1D1F2C]">{{ subName }}</p>
-                  </template>
-                </VCheckbox>
+                <div class="flex justify-space-between">
+                  <VCheckbox v-model="service" :hide-details="true" color="#80509C" :value="id">
+                    <template #label>
+                      <p class="text-xs sm:text-base text-[#1D1F2C]">{{ subName }}</p>
+                    </template>
+                  </VCheckbox>
+
+                  <VIcon
+                    icon="mdi-alert-circle-outline cursor-pointer"
+                    @click="handleShowDesc(id)"
+                  />
+                </div>
 
                 <div class="ml-10">
                   <b class="text-xs sm:text-xl text-[#1B223C]">{{ formatCurrency(list_price) }}</b>
                   <p class="text-xs sm:text-sm text-[#525B66] font-normal">{{ duration }} mins</p>
-                  <p v-if="description_sale" class="text-xs sm:text-base text-[#4A4C56] mt-2">
+                  <p
+                    v-if="description_sale && showDescId === id"
+                    class="text-xs sm:text-base text-[#4A4C56] mt-2"
+                  >
                     {{ description_sale }}
                   </p>
                 </div>
@@ -83,7 +104,7 @@ const filterBookingProduct = () => listProduct?.filter((item) => service.value?.
         </div>
       </VCol>
 
-      <VCol v-if="filterBookingProduct()?.length" :cols="mdAndDown ? '12' : '4'">
+      <VCol v-if="filterBookingProduct()?.length" :cols="mdAndDown ? '12' : '5'">
         <VTable>
           <thead>
             <tr class="bg-purple-soft-woosh">
