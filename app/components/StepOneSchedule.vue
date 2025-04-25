@@ -83,6 +83,7 @@ const handleShowDesc = (id: string) => {
                   </VCheckbox>
 
                   <VIcon
+                    v-if="description_sale"
                     icon="mdi-alert-circle-outline cursor-pointer"
                     @click="handleShowDesc(id)"
                   />
