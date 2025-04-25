@@ -75,7 +75,7 @@ const handleShowDesc = (id: string) => {
                 ) in product"
                 :key="subIndex"
               >
-                <div class="flex justify-space-between">
+                <div class="flex justify-space-between items-center">
                   <VCheckbox v-model="service" :hide-details="true" color="#80509C" :value="id">
                     <template #label>
                       <p class="text-xs sm:text-base text-[#1D1F2C]">{{ subName }}</p>
