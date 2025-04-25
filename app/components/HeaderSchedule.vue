@@ -1,7 +1,16 @@
+<script lang="ts" setup>
+defineProps({
+  hideLogo: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
+
 <template>
   <header class="shadow-md bg-white">
     <nav class="flex items-center sm:justify-evenly p-6 lg:px-8" aria-label="Global">
-      <NuxtImg height="25" width="136" src="/woosh-logo.png" alt="logo" />
+      <NuxtImg v-if="!hideLogo" height="25" width="136" src="/woosh-logo.png" alt="logo" />
       <!-- <div class="hidden sm:items-center sm:gap-4 sm:flex">
         <p class="font-normal text-[#525B66] hover:text-purple-woosh cursor-pointer">Order Now</p>
         <p class="font-normal text-[#525B66] hover:text-purple-woosh cursor-pointer">Booking</p>

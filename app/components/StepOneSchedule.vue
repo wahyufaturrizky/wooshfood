@@ -2,7 +2,6 @@
 const emit = defineEmits(["next"]);
 const service = defineModel("service");
 
-const showDesc = ref(false);
 const showDescId = ref();
 
 defineProps({
