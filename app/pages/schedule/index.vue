@@ -136,7 +136,7 @@ const handleNext = (next) => {
 
 <template>
   <div>
-    <HeaderSchedule />
+    <HeaderSchedule :hide-logo="true" />
 
     <div class="mx-auto max-w-7xl py-11 sm:py-48 lg:py-56">
       <div class="text-center">
