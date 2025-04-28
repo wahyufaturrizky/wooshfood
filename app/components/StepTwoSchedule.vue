@@ -103,7 +103,7 @@ watch(time, (newTime) => {
 <template>
   <VForm @submit.prevent="hadnleNext">
     <VRow>
-      <VCol :cols="mdAndDown ? '12' : '8'">
+      <VCol :cols="mdAndDown ? '12' : '7'">
         <div class="border border-[#ECEFF3] p-4 rounded-lg">
           <VDatePicker
             v-model="dateTime"
@@ -160,7 +160,7 @@ watch(time, (newTime) => {
         </div>
       </VCol>
 
-      <VCol :cols="mdAndDown ? '12' : '4'">
+      <VCol :cols="mdAndDown ? '12' : '5'">
         <VTable>
           <thead>
             <tr class="bg-purple-soft-woosh">

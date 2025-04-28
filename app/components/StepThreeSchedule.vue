@@ -28,12 +28,12 @@ const handleNext = () => {
 <template>
   <VForm @submit.prevent="handleNext">
     <VRow>
-      <VCol :cols="mdAndDown ? '12' : '8'">
+      <VCol :cols="mdAndDown ? '12' : '7'">
         <div class="border border-[#ECEFF3] p-4 rounded-lg">
           <p class="text-black-500 text-lg mb-4">Confirm Your Details</p>
 
           <VRow>
-            <VCol :cols="mdAndDown ? '12' : '6'">
+            <VCol class="pb-0" :cols="mdAndDown ? '12' : '6'">
               <VTextField
                 v-model="firstName"
                 color="#80509C"
@@ -43,7 +43,7 @@ const handleNext = () => {
                 :rules="[(val) => requiredField(val, 'You must enter a first name.')]"
               />
             </VCol>
-            <VCol :cols="mdAndDown ? '12' : '6'">
+            <VCol class="pb-0" :cols="mdAndDown ? '12' : '6'">
               <VTextField
                 v-model="lastName"
                 color="#80509C"
@@ -56,7 +56,7 @@ const handleNext = () => {
           </VRow>
 
           <VRow>
-            <VCol :cols="mdAndDown ? '12' : '6'">
+            <VCol class="pt-0 pb-0" :cols="mdAndDown ? '12' : '6'">
               <VTextField
                 v-model="email"
                 color="#80509C"
@@ -66,7 +66,7 @@ const handleNext = () => {
                 :rules="[(val) => requiredField(val, 'You must enter a email.')]"
               />
             </VCol>
-            <VCol :cols="mdAndDown ? '12' : '6'">
+            <VCol class="pt-0 pb-0" :cols="mdAndDown ? '12' : '6'">
               <VTextField
                 v-model="phone"
                 color="#80509C"
@@ -79,7 +79,7 @@ const handleNext = () => {
           </VRow>
 
           <VRow>
-            <VCol :cols="'12'">
+            <VCol class="pt-0 pb-0" :cols="'12'">
               <VTextField
                 v-model="regNumber"
                 color="#80509C"
@@ -92,7 +92,7 @@ const handleNext = () => {
           </VRow>
 
           <VRow>
-            <VCol :cols="'12'">
+            <VCol class="pt-0 pb-0" :cols="'12'">
               <VTextarea
                 v-model="message"
                 color="#80509C"
@@ -105,7 +105,7 @@ const handleNext = () => {
         </div>
       </VCol>
 
-      <VCol :cols="mdAndDown ? '12' : '4'">
+      <VCol :cols="mdAndDown ? '12' : '5'">
         <VTable>
           <thead>
             <tr class="bg-purple-soft-woosh">
