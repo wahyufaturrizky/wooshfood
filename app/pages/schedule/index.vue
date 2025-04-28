@@ -45,7 +45,7 @@ const handleProceed = async (next) => {
             country_id: country_id.value,
           },
           date_booking: formatDateTime(dateTime.value, time.value),
-          message: message.value,
+          messages: message.value,
           product_id: productId.value.map(({ id, name }) => ({
             id,
             name,
