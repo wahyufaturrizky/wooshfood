@@ -25,6 +25,15 @@ defineProps({
     type: String,
   },
 });
+
+const { data: dataBookingCompany, status: statusBookingCompany } = await useAsyncData(
+  "booking-product",
+  async () => {
+    const [bookingCompany] = await Promise.all([$fetch("/api/booking/company")]);
+
+    return { bookingCompany };
+  }
+);
 </script>
 
 <template>
@@ -35,7 +44,12 @@ defineProps({
       </div>
 
       <p class="text-black-500 text-center text-lg mb-4 font-medium">
-        Thank you for booking with WooshCompany!
+        Thank you for booking with
+        {{
+          statusBookingCompany !== "success"
+            ? "Loading..."
+            : (dataBookingCompany as any)?.bookingCompany?.result?.result?.[0]?.name
+        }}!
       </p>
       <p class="text-[#525B66] text-base text-center mb-12 font-normal">
         Your booking is scheduled for {{ formatDateTimeBooking(dateTime, time) }}

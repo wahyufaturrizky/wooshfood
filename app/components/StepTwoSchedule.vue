@@ -78,7 +78,7 @@ const getTimeSlotsForDate = (selectedDate) => {
 
 // Compute time slots based on the selected date
 const timeSlots = computed(() => {
-  const slots = getTimeSlotsForDate(dateTime.value || new Date());
+  const slots = getTimeSlotsForDate(dateTime.value);
 
   // Separate into morning and afternoon
   const morning = slots.filter((time) => {
