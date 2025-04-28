@@ -27,10 +27,9 @@ defineProps({
 });
 
 const { data: dataBookingCompany, status: statusBookingCompany } = await useAsyncData(
-  "booking-product",
+  "booking-company",
   async () => {
     const [bookingCompany] = await Promise.all([$fetch("/api/booking/company")]);
-    console.log('>>>>>> bookingCompany', bookingCompany)
     return { bookingCompany };
   }
 );
