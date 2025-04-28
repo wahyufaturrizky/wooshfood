@@ -149,13 +149,7 @@ const handleNext = (next) => {
         <template #default="{ next }">
           <VStepperHeader class="!shadow-none">
             <template v-for="n in stepperList" :key="`${n}-step`">
-              <VStepperItem
-                color="#80509C"
-                :value="n"
-                :step="titleStep[n]"
-                :title="titleStep[n]"
-                editable
-              />
+              <VStepperItem color="#80509C" :value="n" :step="titleStep[n]" :title="titleStep[n]" />
 
               <div v-if="n !== stepperList" :key="n" class="w-full border-dashed border" />
             </template>
