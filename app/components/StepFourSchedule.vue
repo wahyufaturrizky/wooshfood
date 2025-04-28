@@ -56,28 +56,28 @@ const { data: dataBookingCompany, status: statusBookingCompany } = await useAsyn
       </p>
 
       <div class="flex sm:ml-40">
-        <p class="text-[#525B66] w-40">Booking ID</p>
-        <p class="font-light ml-1 w-10">:</p>
+        <p class="text-[#525B66] w-[30%]">Booking ID</p>
+        <p class="font-light ml-1">:</p>
         <p class="font-light ml-1 break-all w-50">{{ bookingId }}</p>
       </div>
       <div class="flex sm:ml-40">
-        <p class="text-[#525B66] w-40">Name</p>
-        <p class="font-light ml-1 w-10">:</p>
+        <p class="text-[#525B66] w-[30%]">Name</p>
+        <p class="font-light ml-1">:</p>
         <p class="font-light ml-1 break-all w-50">{{ firstName }} {{ lastName }}</p>
       </div>
       <div class="flex sm:ml-40">
-        <p class="text-[#525B66] w-40">Email</p>
-        <p class="font-light ml-1 w-10">:</p>
+        <p class="text-[#525B66] w-[30%]">Email</p>
+        <p class="font-light ml-1">:</p>
         <p class="font-light ml-1 break-all w-50">{{ email }}</p>
       </div>
       <div class="flex sm:ml-40">
-        <p class="text-[#525B66] w-40">Phone</p>
-        <p class="font-light ml-1 w-10">:</p>
+        <p class="text-[#525B66] w-[30%]">Phone</p>
+        <p class="font-light ml-1">:</p>
         <p class="font-light ml-1 break-all w-50">{{ phone }}</p>
       </div>
       <div class="flex sm:ml-40">
-        <p class="text-[#525B66] w-40">Message</p>
-        <p class="font-light ml-1 w-10">:</p>
+        <p class="text-[#525B66] w-[30%]">Message</p>
+        <p class="font-light ml-1">:</p>
         <p class="font-light ml-1 break-all w-50">{{ message }}</p>
       </div>
     </VCol>
