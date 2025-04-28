@@ -30,7 +30,7 @@ const { data: dataBookingCompany, status: statusBookingCompany } = await useAsyn
   "booking-product",
   async () => {
     const [bookingCompany] = await Promise.all([$fetch("/api/booking/company")]);
-
+    console.log('>>>>>> bookingCompany', bookingCompany)
     return { bookingCompany };
   }
 );
