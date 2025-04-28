@@ -11,7 +11,8 @@
     "prepare": "nuxt prepare",
     "typecheck": "nuxt typecheck",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "start": "node .output/server/index.mjs"
   },
   "dependencies": {
     "@nuxt/eslint": "0.7.4",
