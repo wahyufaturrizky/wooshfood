@@ -4,7 +4,7 @@ import type { ResSalesOrder } from "~/interface/common.interface";
 const stepper = ref(1);
 
 const service = ref([]);
-const dateTime = ref();
+const dateTime = ref(new Date());
 const time = ref();
 const firstName = ref("");
 const lastName = ref("");
